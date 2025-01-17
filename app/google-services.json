@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "673723401249",
+    "project_id": "pokemonlist-885c5",
+    "storage_bucket": "pokemonlist-885c5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:673723401249:android:bee1ddda142b4821210f60",
+        "android_client_info": {
+          "package_name": "linares.rodriguez.pokemonlist"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByyLVAso-WgYZsu1EBVYqAnGjaoDYLwWQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
