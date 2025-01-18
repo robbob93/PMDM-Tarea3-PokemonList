@@ -38,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent signInIntent = AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
+                .setIsSmartLockEnabled(false)
                 .setLogo(R.drawable.logo_masterball)      // Set logo drawable
                 .setTheme(R.style.Theme_PokemonList)      // Set theme
                 .build();

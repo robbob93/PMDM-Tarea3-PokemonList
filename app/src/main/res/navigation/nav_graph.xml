@@ -19,5 +19,5 @@
         android:id="@+id/capturedPokemon"
         android:name="linares.rodriguez.pokemonlist.CapturedPokemon"
         android:label="fragment_captured_pokemon"
-        tools:layout="@layout/fragment_captured_pokemon" />
+        tools:layout="@layout/fragment_captured" />
 </navigation>
