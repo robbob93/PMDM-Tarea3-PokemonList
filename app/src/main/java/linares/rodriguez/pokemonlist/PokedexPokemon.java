@@ -1,9 +1,9 @@
 package linares.rodriguez.pokemonlist;
 
-public class PruebaPokedexPokemon {
+public class PokedexPokemon {
     private String name;
 
-    public PruebaPokedexPokemon(String name) {
+    public PokedexPokemon(String name) {
         this.name = name;
     }
 

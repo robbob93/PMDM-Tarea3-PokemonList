@@ -12,9 +12,9 @@ import linares.rodriguez.pokemonlist.databinding.CardviewPokedexBinding;
 
 public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexViewHolder> {
 
-    private List<PruebaPokedexPokemon> pokedexList;
+    private List<PokedexPokemon> pokedexList;
 
-    public PokedexAdapter(List<PruebaPokedexPokemon> pokedexList) {
+    public PokedexAdapter(List<PokedexPokemon> pokedexList) {
         this.pokedexList = pokedexList;
     }
 
@@ -28,7 +28,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
 
     @Override
     public void onBindViewHolder(@NonNull PokedexViewHolder holder, int position) {
-        PruebaPokedexPokemon pokemon = pokedexList.get(position);
+        PokedexPokemon pokemon = pokedexList.get(position);
         holder.bind(pokemon);
     }
 
@@ -45,7 +45,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
             this.binding = binding;
         }
 
-        public void bind(PruebaPokedexPokemon pokemon) {
+        public void bind(PokedexPokemon pokemon) {
             binding.pkName.setText(pokemon.getName());
         }
     }
