@@ -2,6 +2,24 @@ package linares.rodriguez.pokemonlist;
 
 public class PokemonData {
 
+    public PokemonData(String name, int index, int imageURL, String[] tipo, float peso, float altura) {
+        this.name = name;
+        this.index = index;
+        //this.imageURL = imageURL;
+        this.tipo = tipo;
+        this.peso = peso;
+        this.altura = altura;
+    }
+
+    public PokemonData(String name, int index, String[] tipo, float peso, float altura) {
+        this.name = name;
+        this.index = index;
+        //this.imageURL = imageURL;
+        this.tipo = tipo;
+        this.peso = peso;
+        this.altura = altura;
+    }
+
     private String name;
     private int index;
     private String imageURL;
