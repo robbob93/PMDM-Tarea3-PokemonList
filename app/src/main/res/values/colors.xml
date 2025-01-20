@@ -5,5 +5,7 @@
     <color name="amarillo">#FFCC00</color>
     <color name="rojo">#FF0000</color>
     <color name="azul">#3B4CCA</color>
+    <color name="captured_color">#BAFFAB</color>
+    <color name="default_color">#FFFFFF</color>
 
 </resources>
