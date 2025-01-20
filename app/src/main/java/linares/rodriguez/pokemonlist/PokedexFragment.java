@@ -51,7 +51,7 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = PokedexFragmentBinding.inflate(inflater, container, false);
-        
+
         loadCapturedPokemon();
 
         // Configurar RecyclerView
