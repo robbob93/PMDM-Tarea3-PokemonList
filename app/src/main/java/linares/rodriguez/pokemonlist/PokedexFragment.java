@@ -37,7 +37,7 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
 
 
     private PokedexFragmentBinding binding;
-    private List<Pokemon> pokedexList = new ArrayList<>();
+    private List<PokedexPokemon> pokedexList = new ArrayList<>();
     private Retrofit retrofit;
     private PokedexAdapter pokedexAdapter;
 
@@ -79,8 +79,10 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
  */
     }
 
-
-    public List<Pokemon> getPokemonList() {
+    /*
+    Obtiene la lista de pokemon. Solo su nombre y URL
+     */
+    public List<PokedexPokemon> getPokemonList() {
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://pokeapi.co/api/v2/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -93,7 +95,23 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
             public void onResponse(Call<PokeApiResp> call, Response<PokeApiResp> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     // Obtiene la lista de Pokémon desde la API
-                    pokedexList = response.body().getResults();
+                    List<PokeApiResp.PokemonResult> results = response.body().getResults();
+                    for (PokeApiResp.PokemonResult result : results) {
+                        // Crea un objeto PokedexPokemon inicial
+                        PokedexPokemon pokemon = new PokedexPokemon(
+                                result.getName(),  // Nombre del Pokémon
+                                0,                 // ID aún no disponible
+                                "",                // URL de imagen aún no disponible
+                                new ArrayList<>(), // Tipos aún no disponibles
+                                0,                 // Peso aún no disponible
+                                0                  // Altura aún no disponible
+                        );
+
+                        // Añádelo a la lista y llama a fetchPokemonDetails para completar los detalles
+                        pokedexList.add(pokemon);
+                        fetchPokemonDetails(result.getUrl(), pokemon);
+                        //System.out.println("Pokemon: " + result.getName() + " tiene la URL: " + result.getUrl());
+                    }
 
                     // Inicializa el adaptador aquí, asegurándose de que ya se pase el Set de Pokémon capturados
                     PokedexAdapter pokedexAdapter = new PokedexAdapter(pokedexList, capturedPokemonSet, getContext());
@@ -101,18 +119,20 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
                     // Configura el listener para manejar la captura de Pokémon
                     pokedexAdapter.setOnPokemonCapturedListener(new PokedexAdapter.OnPokemonCapturedListener() {
                         @Override
-                        public void onPokemonCaptured(String pokemonName) {
+                        public void onPokemonCaptured(PokedexPokemon pokemon) {
                             // Agrega el Pokémon al conjunto de capturados
-                            capturedPokemonSet.add(pokemonName);
-                            System.out.println("Se ha capturado el pokemon: " + pokemonName);
+                            capturedPokemonSet.add(pokemon.getName());
+                            System.out.println("Se ha capturado el pokemon: " + pokemon.getName());
                             // Si necesitas actualizar algo en la vista, puedes hacerlo aquí
-                            saveCapturedPokemonToFirestore(new Pokemon(pokemonName));
+                            saveCapturedPokemonToFirestore(pokemon);
                             pokedexAdapter.notifyDataSetChanged();
                         }
                     });
 
                     // Establecer el adaptador al RecyclerView
                     binding.recyclerViewPokedex.setAdapter(pokedexAdapter);
+                } else {
+                    Toast.makeText(getContext(), "Error al cargar lista de Pokémon", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -124,13 +144,42 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
         return pokedexList;
     }
 
-    private void saveCapturedPokemonToFirestore(Pokemon pokemon) {
-        // Crear un mapa para guardar los datos en Firestore
+    private void fetchPokemonDetails(String url, PokedexPokemon pokemon) {
+        PokeApiService apiService = retrofit.create(PokeApiService.class);
 
+        // Extrae el nombre del Pokémon desde la URL
+        String pokemonName = url.substring(url.lastIndexOf("/", url.length() - 2) + 1, url.length() - 1);
 
-        Map<String, Object> pokemonMap = new HashMap<>();
-        pokemonMap.put("name", pokemon.getName());
+        Call<PokemonDetails> call = apiService.getPokemonDetails(pokemonName);
+        call.enqueue(new Callback<PokemonDetails>() {
+            @Override
+            public void onResponse(Call<PokemonDetails> call, Response<PokemonDetails> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    PokemonDetails details = response.body();
 
+                    // Actualiza el Pokémon con los detalles adicionales
+                    pokemon.setId(details.getId());
+                    pokemon.setImageUrl(details.getImageUrl());
+                    //pokemon.setTypes(details.getTypeNames());
+                    pokemon.setWeight(details.getWeight());
+                    pokemon.setHeight(details.getHeight());
+
+                    // Notifica al adaptador para que actualice la vista
+                    pokedexAdapter.notifyDataSetChanged();
+                }
+
+                //System.out.println("Pokemon " +  pokemon.getName() + "pesa: " + pokemon.getWeight());
+            }
+
+            @Override
+            public void onFailure(Call<PokemonDetails> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+
+    }
+
+    private void saveCapturedPokemonToFirestore(PokedexPokemon pokemon) {
         database.collection("capturados")
                 .add(pokemon).addOnSuccessListener(runnable ->
                         Toast.makeText(getContext(),"Saved Successfully", Toast.LENGTH_SHORT).show())
@@ -138,11 +187,6 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
                         Toast.makeText(getContext(),"Saved Failure", Toast.LENGTH_SHORT).show());
     }
 
-
-    public void onPokemonCaptured(String pokemonName) {
-        saveCapturedPokemonToFirestore(new Pokemon(pokemonName));
-        System.out.println("Pokemon capturado: " + pokemonName);
-    }
 
     private void loadCapturedPokemon() {
 
@@ -176,6 +220,11 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onPokemonCaptured(PokedexPokemon pokemon) {
+
     }
 
 

@@ -59,6 +59,9 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
 
         public void bind(Pokemon pokemon) {
             binding.namePokemon.setText(pokemon.getName());
+            binding.indexPokemon.setText(String.valueOf(pokemon.getId()));
+            binding.alturaPokemon.setText(String.valueOf(pokemon.getHeight()));
+            binding.pesoPokemon.setText(String.valueOf(pokemon.getWeight()));
             // Otros datos, como tipo, peso, altura, etc.
         }
     }

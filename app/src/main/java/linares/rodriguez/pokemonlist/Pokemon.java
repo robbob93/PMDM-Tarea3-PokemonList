@@ -1,11 +1,33 @@
 package linares.rodriguez.pokemonlist;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Pokemon {
+
+
+    @SerializedName("id")
+    private int id;
+
+    @SerializedName("name")
+    private String name;
+/*
+    @SerializedName("sprites")
+    private Sprites sprites;
+
+    @SerializedName("types")
+    private List<TypeEntry> types;
+ */
+    @SerializedName("weight")
+    private float weight;
+
+    @SerializedName("height")
+    private float height;
+
 
     public Pokemon(String name, int index, String imageURL, String[] tipo, float peso, float altura) {
         this.name = name;
-        this.index = index;
-        this.imageURL = imageURL;
+        this.id = index;
+        this.imageUrl = imageURL;
         this.tipo = tipo;
         this.peso = peso;
         this.altura = altura;
@@ -13,19 +35,18 @@ public class Pokemon {
 
     public Pokemon(String name, int index, String[] tipo, float peso, float altura) {
         this.name = name;
-        this.index = index;
+        this.id = index;
         //this.imageURL = imageURL;
         this.tipo = tipo;
         this.peso = peso;
         this.altura = altura;
     }
+    // Constructor sin argumentos (requerido por Firestore)
+    public Pokemon() {
+    }
 
 
-
-
-    private String name;
-    private int index;
-    private String imageURL;
+    private String imageUrl;
     private String[] tipo;
     private float peso;
     private float altura;
@@ -43,20 +64,20 @@ public class Pokemon {
         this.name = name;
     }
 
-    public int getIndex() {
-        return index;
+    public int getId() {
+        return id;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String[] getTipo() {
@@ -67,16 +88,16 @@ public class Pokemon {
         this.tipo = tipo;
     }
 
-    public float getPeso() {
-        return peso;
+    public float getWeight() {
+        return weight;
     }
 
     public void setPeso(float peso) {
         this.peso = peso;
     }
 
-    public float getAltura() {
-        return altura;
+    public float getHeight() {
+        return height;
     }
 
     public void setAltura(float altura) {

@@ -18,6 +18,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import linares.rodriguez.pokemonlist.databinding.FragmentCapturedBinding;
@@ -37,59 +39,35 @@ public class CapturedFragment extends Fragment {
         binding.capturedRecyclerView.setAdapter(adapter);
 
         // Cargar Pokémon capturados desde Firestore
-        //fetchCapturedPokemonFromFirestore();
-        loadCapturedPokemon();
+        fetchCapturedPokemonFromFirestore();
         return binding.getRoot();
     }
 
     private void fetchCapturedPokemonFromFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("captured").get().addOnCompleteListener(task -> {
+        db.collection("capturados").get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {
                 capturedPokemonList.clear();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Pokemon pokemon = document.toObject(Pokemon.class);
                     capturedPokemonList.add(pokemon);
+                    System.out.println("Pokemon añadido en la pantalla de capturados: " + pokemon.getName() + " Indice: " + pokemon.getId() + " peso: " +  pokemon.getWeight());
                 }
-                System.out.println("Tamaño lista recuperada de firestore: " + capturedPokemonList.size());
+                //Ordenación de la lista
+                capturedPokemonList.sort(Comparator.comparingInt(pokemon -> pokemon.getId()));
+
+                System.out.println("Pokemon capturados: ");
+                for(Pokemon p : capturedPokemonList){
+                    System.out.println(p.getName() + " Id: " + p.getId());
+                }
                 adapter.notifyDataSetChanged();
+                System.out.println("Tamaño lista recuperada de firestore: " + capturedPokemonList.size());
             } else {
                 Toast.makeText(getContext(), "Error al cargar Pokémon capturados", Toast.LENGTH_SHORT).show();
             }
             System.out.println("Tamaño lista recuperada de firestore: " + capturedPokemonList.size());
         });
     }
-
-    private void loadCapturedPokemon() {
-        FirebaseFirestore database = FirebaseFirestore.getInstance();
-        // Obtén los Pokémon capturados desde Firestore
-        database.collection("capturados")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            // Vaciar el set de capturados actual para evitar duplicados
-                            capturedPokemonList.clear();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String name = document.getString("name");
-                                System.out.println("Pokemon recuperado de Firestore: " + name);
-                                if (name != null) {
-                                    // Agregar el Pokémon capturado al set
-                                    capturedPokemonList.add(new Pokemon(name));
-                                }
-                            }
-                            // Notificación al usuario
-                            Toast.makeText(getContext(), "Se han cargado los Pokémon capturados", Toast.LENGTH_SHORT).show();
-                            System.out.println("Tamaño lista recuperada de firestore: " + capturedPokemonList.size());
-                            adapter.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(getContext(), "Error cargando lista de Pokémon capturados", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-
 
 
 

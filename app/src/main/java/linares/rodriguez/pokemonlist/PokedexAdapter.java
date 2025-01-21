@@ -16,13 +16,13 @@ import linares.rodriguez.pokemonlist.databinding.CardviewPokedexBinding;
 
 public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexViewHolder> {
 
-    private List<Pokemon> pokedexList;
+    private List<PokedexPokemon> pokedexList;
     private Set<String> capturedPokemonSet;
     private Context context;
     private OnPokemonCapturedListener listener;
 
     public interface OnPokemonCapturedListener {
-        void onPokemonCaptured(String pokemonName);
+        void onPokemonCaptured(PokedexPokemon pokemon);
     }
 
     public void setOnPokemonCapturedListener(OnPokemonCapturedListener listener) {
@@ -31,16 +31,12 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
     }
 
 
-    public PokedexAdapter(List<Pokemon> pokedexList, Set<String> capturedPokemonSet, Context context) {
+    public PokedexAdapter(List<PokedexPokemon> pokedexList, Set<String> capturedPokemonSet, Context context) {
         this.pokedexList = pokedexList;
         this.capturedPokemonSet = capturedPokemonSet;
         this.context = context;
     }
 
-    public PokedexAdapter(List<Pokemon> pokedexList, Context context) {
-        this.pokedexList = pokedexList;
-        this.context = context;
-    }
 
     @NonNull
     @Override
@@ -52,7 +48,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
 
     @Override
     public void onBindViewHolder(@NonNull PokedexViewHolder holder, int position) {
-        Pokemon pokemon = pokedexList.get(position);
+        PokedexPokemon pokemon = pokedexList.get(position);
         holder.bind(pokemon, capturedPokemonSet.contains(pokemon.getName()));
 
         // Cambiar color si está capturado
@@ -68,7 +64,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
             if (!capturedPokemonSet.contains(pokemon.getName())) {
                 capturedPokemonSet.add(pokemon.getName()); // Añadir a capturados
                 if (listener != null) {
-                    listener.onPokemonCaptured(pokemon.getName()); // Notificar al fragmento
+                    listener.onPokemonCaptured(pokemon); // Notificar al fragmento
                     System.out.println("Fragmento notificado");
                 }else{
                     System.out.println("Listener es nulo");
@@ -93,10 +89,9 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
             this.binding = binding;
         }
 
-        public void bind(Pokemon pokemon, boolean isCaptured) {
+        public void bind(PokedexPokemon pokemon, boolean isCaptured) {
             binding.pkName.setText(pokemon.getName());
             itemView.setBackgroundColor(isCaptured ? Color.parseColor("#DFF2BF") : Color.WHITE);
         }
     }
-
 }
