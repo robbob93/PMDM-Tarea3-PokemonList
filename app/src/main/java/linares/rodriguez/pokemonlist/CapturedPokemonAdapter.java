@@ -3,9 +3,13 @@ package linares.rodriguez.pokemonlist;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -14,6 +18,7 @@ import linares.rodriguez.pokemonlist.databinding.CardviewCapturedBinding;
 public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemonAdapter.CapturedViewHolder> {
     private final List<Pokemon> capturedPokemonList;
     private final Context context;
+    private PokedexAdapter.OnPokemonCapturedListener listener;
 
     public CapturedPokemonAdapter(List<Pokemon> capturedPokemonList, Context context) {
         this.capturedPokemonList = capturedPokemonList;
@@ -32,18 +37,25 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
     public void onBindViewHolder(@NonNull CapturedViewHolder holder, int position) {
         Pokemon pokemon = capturedPokemonList.get(position);
         holder.bind(pokemon);
-
-        // Listener para eliminar Pokémon capturado (si es necesario)
-        holder.itemView.setOnLongClickListener(v -> {
-            // Lógica para eliminar Pokémon de Firestore
-            return true;
-        });
     }
 
     @Override
     public int getItemCount() {
         return capturedPokemonList.size();
     }
+
+
+
+    public void setOnPokemonCapturedListener(PokedexAdapter.OnPokemonCapturedListener listener) {
+        this.listener = listener;
+        System.out.println("Listener configurado: " + (listener != null)); // Agrega esta línea para verificar
+    }
+
+    public interface OnPokemonCapturedListener {
+        void onPokemonCaptured(PokedexPokemon pokemon);
+    }
+
+
 
 
 
@@ -58,11 +70,35 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
         }
 
         public void bind(Pokemon pokemon) {
-            binding.namePokemon.setText(pokemon.getName());
-            binding.indexPokemon.setText(String.valueOf(pokemon.getId()));
-            binding.alturaPokemon.setText(String.valueOf(pokemon.getHeight()));
-            binding.pesoPokemon.setText(String.valueOf(pokemon.getWeight()));
-            // Otros datos, como tipo, peso, altura, etc.
+            String nombre = pokemon.getName();
+            binding.namePokemon.setText(nombre.toUpperCase().charAt(0) + nombre.substring(1, nombre.length()));
+            //nombre.toUpperCase().charAt(0) + nombre.substring(1, nombre.length()).toLowerCase();
+            //binding.indexPokemon.setText(String.valueOf(pokemon.getId()));
+            //binding.alturaPokemon.setText(String.valueOf(pokemon.getHeight()));
+            //binding.pesoPokemon.setText(String.valueOf(pokemon.getWeight()));
+
+            Picasso.get().load(pokemon.getImageUrl()).into(binding.imagePokemon);
+
+            binding.releaseButton.setOnClickListener(view -> {
+                System.out.println("Pokemon " + pokemon.getName()+ " pulsado boton liberar");
+                FirebaseFirestore database = FirebaseFirestore.getInstance();
+                database.collection("capturados").whereEqualTo("id", pokemon.getId())
+                        .get().addOnSuccessListener(querySnapshot ->  {
+                            if(querySnapshot.isEmpty()){
+                                Toast.makeText(view.getContext(), "No se pudo eliminar el pokemon", Toast.LENGTH_SHORT).show();
+                            }else{
+                                querySnapshot.getDocuments().get(0).getReference().delete()
+                                        .addOnSuccessListener(runnable ->
+                                                System.out.println("Borrado pokemon"))
+
+                                        .addOnFailureListener(runnable ->
+                                                System.out.println("No se pudo borrar el pokemon")
+                                        );
+
+                            }
+                        });
+
+            });
         }
     }
 }

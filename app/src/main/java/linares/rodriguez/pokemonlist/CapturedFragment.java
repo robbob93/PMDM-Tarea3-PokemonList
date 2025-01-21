@@ -51,15 +51,17 @@ public class CapturedFragment extends Fragment {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Pokemon pokemon = document.toObject(Pokemon.class);
                     capturedPokemonList.add(pokemon);
-                    System.out.println("Pokemon añadido en la pantalla de capturados: " + pokemon.getName() + " Indice: " + pokemon.getId() + " peso: " +  pokemon.getWeight());
+                    //System.out.println("Pokemon añadido en la pantalla de capturados: " + pokemon.getName() + " Indice: " + pokemon.getId() + " peso: " +  pokemon.getWeight());
                 }
                 //Ordenación de la lista
                 capturedPokemonList.sort(Comparator.comparingInt(pokemon -> pokemon.getId()));
-
+/*
                 System.out.println("Pokemon capturados: ");
                 for(Pokemon p : capturedPokemonList){
                     System.out.println(p.getName() + " Id: " + p.getId());
                 }
+
+ */
                 adapter.notifyDataSetChanged();
                 System.out.println("Tamaño lista recuperada de firestore: " + capturedPokemonList.size());
             } else {
@@ -67,6 +69,7 @@ public class CapturedFragment extends Fragment {
             }
             System.out.println("Tamaño lista recuperada de firestore: " + capturedPokemonList.size());
         });
+
     }
 
 
