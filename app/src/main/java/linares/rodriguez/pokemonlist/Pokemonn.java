@@ -1,13 +1,16 @@
 package linares.rodriguez.pokemonlist;
-
-public class PokedexPokemon {
+/*
+public class Pokemona {
     private String name;
 
-    public PokedexPokemon(String name) {
+    public Pokemon(String name) {
         this.name = name;
     }
+
+
 
     public String getName() {
         return name;
     }
 }
+        */

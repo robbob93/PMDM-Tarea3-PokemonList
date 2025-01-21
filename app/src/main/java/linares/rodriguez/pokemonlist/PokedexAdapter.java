@@ -16,7 +16,7 @@ import linares.rodriguez.pokemonlist.databinding.CardviewPokedexBinding;
 
 public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexViewHolder> {
 
-    private List<PokedexPokemon> pokedexList;
+    private List<Pokemon> pokedexList;
     private Set<String> capturedPokemonSet;
     private Context context;
     private OnPokemonCapturedListener listener;
@@ -31,13 +31,13 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
     }
 
 
-    public PokedexAdapter(List<PokedexPokemon> pokedexList, Set<String> capturedPokemonSet, Context context) {
+    public PokedexAdapter(List<Pokemon> pokedexList, Set<String> capturedPokemonSet, Context context) {
         this.pokedexList = pokedexList;
         this.capturedPokemonSet = capturedPokemonSet;
         this.context = context;
     }
 
-    public PokedexAdapter(List<PokedexPokemon> pokedexList, Context context) {
+    public PokedexAdapter(List<Pokemon> pokedexList, Context context) {
         this.pokedexList = pokedexList;
         this.context = context;
     }
@@ -52,7 +52,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
 
     @Override
     public void onBindViewHolder(@NonNull PokedexViewHolder holder, int position) {
-        PokedexPokemon pokemon = pokedexList.get(position);
+        Pokemon pokemon = pokedexList.get(position);
         holder.bind(pokemon, capturedPokemonSet.contains(pokemon.getName()));
 
         // Cambiar color si está capturado
@@ -85,11 +85,6 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
     }
 
 
-
-
-
-
-
     public static class PokedexViewHolder extends RecyclerView.ViewHolder {
         private final CardviewPokedexBinding binding;
 
@@ -98,7 +93,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
             this.binding = binding;
         }
 
-        public void bind(PokedexPokemon pokemon, boolean isCaptured) {
+        public void bind(Pokemon pokemon, boolean isCaptured) {
             binding.pkName.setText(pokemon.getName());
             itemView.setBackgroundColor(isCaptured ? Color.parseColor("#DFF2BF") : Color.WHITE);
         }

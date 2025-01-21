@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +37,7 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
 
 
     private PokedexFragmentBinding binding;
-    private List<PokedexPokemon> pokedexList = new ArrayList<>();
+    private List<Pokemon> pokedexList = new ArrayList<>();
     private Retrofit retrofit;
     private PokedexAdapter pokedexAdapter;
 
@@ -81,7 +80,7 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
     }
 
 
-    public List<PokedexPokemon> getPokemonList() {
+    public List<Pokemon> getPokemonList() {
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://pokeapi.co/api/v2/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -107,7 +106,7 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
                             capturedPokemonSet.add(pokemonName);
                             System.out.println("Se ha capturado el pokemon: " + pokemonName);
                             // Si necesitas actualizar algo en la vista, puedes hacerlo aquí
-                            saveCapturedPokemonToFirestore(new PokedexPokemon(pokemonName));
+                            saveCapturedPokemonToFirestore(new Pokemon(pokemonName));
                             pokedexAdapter.notifyDataSetChanged();
                         }
                     });
@@ -125,7 +124,7 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
         return pokedexList;
     }
 
-    private void saveCapturedPokemonToFirestore(PokedexPokemon pokemon) {
+    private void saveCapturedPokemonToFirestore(Pokemon pokemon) {
         // Crear un mapa para guardar los datos en Firestore
 
 
@@ -141,7 +140,7 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
 
 
     public void onPokemonCaptured(String pokemonName) {
-        saveCapturedPokemonToFirestore(new PokedexPokemon(pokemonName));
+        saveCapturedPokemonToFirestore(new Pokemon(pokemonName));
         System.out.println("Pokemon capturado: " + pokemonName);
     }
 
