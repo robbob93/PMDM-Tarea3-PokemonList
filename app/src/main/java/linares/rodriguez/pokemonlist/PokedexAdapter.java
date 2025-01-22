@@ -51,6 +51,9 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
         PokedexPokemon pokemon = pokedexList.get(position);
         holder.bind(pokemon, capturedPokemonSet.contains(pokemon.getName()));
 
+
+
+
         // Cambiar color si está capturado
         //System.out.println("Tamaño del Set: " +  capturedPokemonSet.size());
         if (capturedPokemonSet.contains(pokemon.getName())) {

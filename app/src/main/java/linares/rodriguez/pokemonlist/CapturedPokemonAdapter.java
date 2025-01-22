@@ -65,8 +65,25 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
         Pokemon pokemon = capturedPokemonList.get(position);
         holder.bind(pokemon);
 
+        // Construir el nombre del recurso basado en el tipo
+        String type = pokemon.getTypes().get(0);
+        String resourceNameType1 = "label_" + type.toLowerCase(); // Ejemplo: "label_grass"
 
+        // Obtener el ID del recurso dinámicamente
+        int resourceId = holder.itemView.getContext().getResources().getIdentifier(
+                resourceNameType1, "drawable", holder.itemView.getContext().getPackageName());
+        System.out.println("Resource Id para pokemon " + pokemon.getName()+ ": " + resourceId );
 
+        holder.binding.imageType.setImageResource(resourceId);
+        if(pokemon.getTypes().size()>1){
+            String type2 = pokemon.getTypes().get(1);
+            String resourceNameType2 = "label_" + type2.toLowerCase(); // Ejemplo: "label_grass"
+            int resourceId2 = holder.itemView.getContext().getResources().getIdentifier(
+                    resourceNameType2, "drawable", holder.itemView.getContext().getPackageName());
+            holder.binding.imageType2.setImageResource(resourceId2);
+        }
+
+        
         // Manejar clic en la tarjeta
         holder.itemView.setOnClickListener(v -> {
             if (itemClickListener != null) {
@@ -103,6 +120,10 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
         public void bind(Pokemon pokemon) {
             String nombre = pokemon.getName();
             binding.namePokemon.setText(nombre.toUpperCase().charAt(0) + nombre.substring(1, nombre.length()));
+
+
+
+
 
             Picasso.get().load(pokemon.getImageUrl()).into(binding.imagePokemon);
 

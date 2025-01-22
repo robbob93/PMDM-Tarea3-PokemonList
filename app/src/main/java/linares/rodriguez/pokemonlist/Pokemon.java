@@ -2,6 +2,8 @@ package linares.rodriguez.pokemonlist;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Pokemon {
 
 
@@ -13,10 +15,10 @@ public class Pokemon {
 /*
     @SerializedName("sprites")
     private Sprites sprites;
-
+*/
     @SerializedName("types")
-    private List<TypeEntry> types;
- */
+    private List<String> types;
+
     @SerializedName("weight")
     private float weight;
 
@@ -24,30 +26,14 @@ public class Pokemon {
     private float height;
 
 
-    public Pokemon(String name, int index, String imageURL, String[] tipo, float peso, float altura) {
-        this.name = name;
-        this.id = index;
-        this.imageUrl = imageURL;
-        this.tipo = tipo;
-        this.peso = peso;
-        this.altura = altura;
-    }
 
-    public Pokemon(String name, int index, String[] tipo, float peso, float altura) {
-        this.name = name;
-        this.id = index;
-        //this.imageURL = imageURL;
-        this.tipo = tipo;
-        this.peso = peso;
-        this.altura = altura;
-    }
     // Constructor sin argumentos (requerido por Firestore)
     public Pokemon() {
     }
 
 
     private String imageUrl;
-    private String[] tipo;
+
     private float peso;
     private float altura;
 
@@ -80,13 +66,13 @@ public class Pokemon {
         this.imageUrl = imageUrl;
     }
 
-    public String[] getTipo() {
-        return tipo;
+    public List<String> getTypes() {
+        return types;
+    }
+    public void setTypes(List<String> types){
+        this.types = types;
     }
 
-    public void setTipo(String[] tipo) {
-        this.tipo = tipo;
-    }
 
     public float getWeight() {
         return weight;
