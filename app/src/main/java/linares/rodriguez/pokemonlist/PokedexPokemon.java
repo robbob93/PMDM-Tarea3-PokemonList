@@ -1,8 +1,9 @@
 package linares.rodriguez.pokemonlist;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class PokedexPokemon {
+public class PokedexPokemon implements Serializable {
     private String name;
     private int id;
     private String imageUrl;

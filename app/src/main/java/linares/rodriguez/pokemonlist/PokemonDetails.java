@@ -2,10 +2,11 @@ package linares.rodriguez.pokemonlist;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PokemonDetails {
+public class PokemonDetails implements Serializable {
     @SerializedName("id")
     private int id;
 

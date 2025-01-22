@@ -83,7 +83,7 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
             holder.binding.imageType2.setImageResource(resourceId2);
         }
 
-        
+
         // Manejar clic en la tarjeta
         holder.itemView.setOnClickListener(v -> {
             if (itemClickListener != null) {

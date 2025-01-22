@@ -22,34 +22,39 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"/>
 
-
-
-
     <TextView
         android:id="@+id/pokemonName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
+        android:textSize="34sp"
         android:textStyle="bold"
         android:gravity="center"
         android:padding="8dp"
         android:text="Nombre Pokemon"/>
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="center">
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pokemon Id: "/>
+            android:text="Pokemon Id: "
+            android:textSize="24sp"/>
 
         <TextView
             android:id="@+id/pokemonIndex"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
             android:padding="8dp"
-            android:text="-1"/>
+            android:text="-1"
+            android:textSize="24sp"/>
 
     </LinearLayout>
 
@@ -57,19 +62,25 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/type_s"/>
+            android:text="@string/type_s"
+            android:textSize="24sp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="5dp"/>
 
-        <TextView
-            android:id="@+id/tipos_pokemon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:padding="8dp"
-            android:text="-1"/>
+        <ImageView
+            android:id="@+id/image_type"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_launcher_background"
+            android:layout_marginEnd="5dp"/>
+        <ImageView
+            android:id="@+id/image_type2"
+            android:layout_width="60dp"
+            android:layout_height="60dp"/>
 
     </LinearLayout>
 
@@ -77,38 +88,43 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/height"
+            android:textSize="24sp"
             ></TextView>
         <TextView
             android:id="@+id/pokemonHeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
             android:padding="8dp"
-            android:text="10000"/>
+            android:text="10000"
+            android:textSize="24sp"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/weight"/>
+            android:text="@string/weight"
+            android:textSize="24sp"/>
 
         <TextView
             android:id="@+id/pokemonWeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="24sp"
             android:padding="8dp"
             android:text="1000"/>
 
     </LinearLayout>
+
+</LinearLayout>
+
 </LinearLayout>

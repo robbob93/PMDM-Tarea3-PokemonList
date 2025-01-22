@@ -87,9 +87,12 @@ public class CapturedFragment extends Fragment {
 
     private void setupAdapter() {
         adapter.setOnItemClickListener(pokemon -> {
+            ArrayList<String> listaTipos = new ArrayList<>(pokemon.getTypes());
+
             Intent intent = new Intent(getContext(), PokemonDetailActivity.class);
             intent.putExtra("name", pokemon.getName());
             intent.putExtra("id", String.valueOf(pokemon.getId()));
+            intent.putExtra("types", listaTipos);
             intent.putExtra("height", String.valueOf(pokemon.getHeight()));
             intent.putExtra("weight", String.valueOf(pokemon.getWeight()));
             intent.putExtra("imageUrl", pokemon.getImageUrl());
