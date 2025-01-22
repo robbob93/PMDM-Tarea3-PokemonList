@@ -40,10 +40,7 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
     private List<PokedexPokemon> pokedexList = new ArrayList<>();
     private Retrofit retrofit;
     private PokedexAdapter pokedexAdapter;
-
-
     private Set<String> capturedPokemonSet = new HashSet<>();
-
     private FirebaseFirestore database = FirebaseFirestore.getInstance();
 
 

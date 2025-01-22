@@ -18,7 +18,18 @@ import linares.rodriguez.pokemonlist.databinding.CardviewCapturedBinding;
 public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemonAdapter.CapturedViewHolder> {
     private final List<Pokemon> capturedPokemonList;
     private final Context context;
-    private PokedexAdapter.OnPokemonCapturedListener listener;
+    private OnPokemonRemovedListener removedListener;
+
+
+
+
+    public void setOnPokemonRemovedListener(OnPokemonRemovedListener listener) {
+        this.removedListener = listener;
+    }
+
+
+
+
 
     public CapturedPokemonAdapter(List<Pokemon> capturedPokemonList, Context context) {
         this.capturedPokemonList = capturedPokemonList;
@@ -37,6 +48,14 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
     public void onBindViewHolder(@NonNull CapturedViewHolder holder, int position) {
         Pokemon pokemon = capturedPokemonList.get(position);
         holder.bind(pokemon);
+
+/*
+        if (removedListener != null) {
+            System.out.println("Llamada a quitar pokemon");
+            removedListener.onPokemonRemoved(pokemon); // Notifica al fragmento
+        }
+
+ */
     }
 
     @Override
@@ -46,14 +65,6 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
 
 
 
-    public void setOnPokemonCapturedListener(PokedexAdapter.OnPokemonCapturedListener listener) {
-        this.listener = listener;
-        System.out.println("Listener configurado: " + (listener != null)); // Agrega esta línea para verificar
-    }
-
-    public interface OnPokemonCapturedListener {
-        void onPokemonCaptured(PokedexPokemon pokemon);
-    }
 
 
 
@@ -61,7 +72,7 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
 
 
 
-    public static class CapturedViewHolder extends RecyclerView.ViewHolder {
+    public class CapturedViewHolder extends RecyclerView.ViewHolder {
         private final CardviewCapturedBinding binding;
 
         public CapturedViewHolder(@NonNull CardviewCapturedBinding binding) {
@@ -79,7 +90,15 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
 
             Picasso.get().load(pokemon.getImageUrl()).into(binding.imagePokemon);
 
+            binding.releaseButton.setOnClickListener(v ->
+                    removedListener.onPokemonRemoved(pokemon)); // Notifica al fragmento);
+
+
+
+/*
             binding.releaseButton.setOnClickListener(view -> {
+
+
                 System.out.println("Pokemon " + pokemon.getName()+ " pulsado boton liberar");
                 FirebaseFirestore database = FirebaseFirestore.getInstance();
                 database.collection("capturados").whereEqualTo("id", pokemon.getId())
@@ -99,7 +118,12 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
                         });
 
             });
+
+ */
         }
+    }
+    public interface OnPokemonRemovedListener {
+        void onPokemonRemoved(Pokemon pokemon);
     }
 }
 

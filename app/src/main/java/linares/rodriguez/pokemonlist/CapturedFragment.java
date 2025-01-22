@@ -36,8 +36,9 @@ public class CapturedFragment extends Fragment {
         // Configura RecyclerView
         binding.capturedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new CapturedPokemonAdapter(capturedPokemonList, getContext());
-        binding.capturedRecyclerView.setAdapter(adapter);
 
+        binding.capturedRecyclerView.setAdapter(adapter);
+        setupAdapter();
         // Cargar Pokémon capturados desde Firestore
         fetchCapturedPokemonFromFirestore();
         return binding.getRoot();
@@ -72,6 +73,25 @@ public class CapturedFragment extends Fragment {
 
     }
 
+
+    private void setupAdapter() {
+        adapter.setOnPokemonRemovedListener(pokemon -> {
+            // Eliminar de Firestore
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("capturados")
+                    .document(pokemon.getName()) // Asegúrate de que el documento tenga el nombre como ID
+                    .delete()
+                    .addOnSuccessListener(aVoid -> {
+                        // Eliminar de la lista local
+                        capturedPokemonList.remove(pokemon);
+                        adapter.notifyDataSetChanged(); // Actualiza el RecyclerView
+                        Toast.makeText(getContext(), pokemon.getName() + " eliminado", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getContext(), "Error al eliminar " + pokemon.getName(), Toast.LENGTH_SHORT).show();
+                    });
+        });
+    }
 
 
 }
