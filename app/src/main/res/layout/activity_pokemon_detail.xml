@@ -9,11 +9,18 @@
     tools:context=".PokemonDetails">
 
     <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/flecha"/>
+
+    <ImageView
         android:id="@+id/image_pokemon"
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:src="@drawable/ic_launcher_background"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"/>
 
 
 

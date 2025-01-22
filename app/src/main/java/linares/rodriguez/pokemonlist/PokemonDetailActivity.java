@@ -21,7 +21,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pokemon_detail);
         binding = ActivityPokemonDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        binding.backButton.setOnClickListener(view -> onBackPressed());
 
         Intent intent = getIntent();
 
