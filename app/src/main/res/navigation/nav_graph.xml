@@ -6,11 +6,6 @@
     app:startDestination="@id/settingsFragment">
 
     <fragment
-        android:id="@+id/settingsFragment"
-        android:name="linares.rodriguez.pokemonlist.SettingsFragment"
-        android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
-    <fragment
         android:id="@+id/pokedexFragment"
         android:name="linares.rodriguez.pokemonlist.PokedexFragment"
         android:label="fragment_pokedex"
@@ -20,4 +15,8 @@
         android:name="linares.rodriguez.pokemonlist.CapturedFragment"
         android:label="fragment_captured_pokemon"
         tools:layout="@layout/fragment_captured" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="linares.rodriguez.pokemonlist.SettingsFragment"
+        android:label="SettingsFragment" />
 </navigation>

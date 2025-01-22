@@ -1,6 +1,8 @@
 package linares.rodriguez.pokemonlist;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,6 +23,7 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
     private final Context context;
     private OnPokemonRemovedListener removedListener;
     private OnItemClickListener itemClickListener;
+    private boolean canDelete;
 
 
 
@@ -46,6 +49,7 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
     public CapturedPokemonAdapter(List<Pokemon> capturedPokemonList, Context context) {
         this.capturedPokemonList = capturedPokemonList;
         this.context = context;
+        this.canDelete = canDelete;
     }
 
     @NonNull
@@ -62,19 +66,14 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
         holder.bind(pokemon);
 
 
+
         // Manejar clic en la tarjeta
         holder.itemView.setOnClickListener(v -> {
             if (itemClickListener != null) {
                 itemClickListener.onItemClick(pokemon);
             }
         });
-/*
-        if (removedListener != null) {
-            System.out.println("Llamada a quitar pokemon");
-            removedListener.onPokemonRemoved(pokemon); // Notifica al fragmento
-        }
 
- */
     }
 
     @Override
@@ -83,7 +82,9 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
     }
 
 
-
+    public void setCanDelete(boolean canDelete) {
+        this.canDelete = canDelete;
+    }
 
 
 
@@ -105,36 +106,20 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
 
             Picasso.get().load(pokemon.getImageUrl()).into(binding.imagePokemon);
 
+            binding.releaseButton.setEnabled(canDelete);
+
+
             binding.releaseButton.setOnClickListener(v ->
                     removedListener.onPokemonRemoved(pokemon)); // Notifica al fragmento);
 
+            // Aplicar filtro a la imagen si canDelete es false
+            if (!canDelete) {
+                binding.releaseButton.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN); // Atenuar color
+            } else {
+                binding.releaseButton.clearColorFilter(); // Restaurar color original
+            }
 
 
-/*
-            binding.releaseButton.setOnClickListener(view -> {
-
-
-                System.out.println("Pokemon " + pokemon.getName()+ " pulsado boton liberar");
-                FirebaseFirestore database = FirebaseFirestore.getInstance();
-                database.collection("capturados").whereEqualTo("id", pokemon.getId())
-                        .get().addOnSuccessListener(querySnapshot ->  {
-                            if(querySnapshot.isEmpty()){
-                                Toast.makeText(view.getContext(), "No se pudo eliminar el pokemon", Toast.LENGTH_SHORT).show();
-                            }else{
-                                querySnapshot.getDocuments().get(0).getReference().delete()
-                                        .addOnSuccessListener(runnable ->
-                                                System.out.println("Borrado pokemon"))
-
-                                        .addOnFailureListener(runnable ->
-                                                System.out.println("No se pudo borrar el pokemon")
-                                        );
-
-                            }
-                        });
-
-            });
-
- */
         }
     }
     public interface OnPokemonRemovedListener {

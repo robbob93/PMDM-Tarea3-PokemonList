@@ -1,10 +1,12 @@
 package linares.rodriguez.pokemonlist;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -30,6 +32,10 @@ public class CapturedFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentCapturedBinding.inflate(inflater, container, false);
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        boolean canDelete = preferences.getBoolean("canDelete", false); // false es el valor predeterminado
+
+
         // Configura RecyclerView
         binding.capturedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new CapturedPokemonAdapter(capturedPokemonList, getContext());
@@ -40,6 +46,18 @@ public class CapturedFragment extends Fragment {
         fetchCapturedPokemonFromFirestore();
         return binding.getRoot();
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Leer el valor actualizado del switch
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        boolean canDelete = preferences.getBoolean("canDelete", false);
+
+        // Actualizar el adaptador con el nuevo valor
+        adapter.setCanDelete(canDelete);
+        adapter.notifyDataSetChanged();
+    }
+
 
     private void fetchCapturedPokemonFromFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();

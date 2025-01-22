@@ -157,7 +157,7 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
                     // Actualiza el Pokémon con los detalles adicionales
                     pokemon.setId(details.getId());
                     pokemon.setImageUrl(details.getImageUrl());
-                    //pokemon.setTypes(details.getTypeNames());
+                    pokemon.setTypes(details.getTypeNames());
                     pokemon.setWeight(details.getWeight()/10f);
                     pokemon.setHeight(details.getHeight()/10f);
 
@@ -165,7 +165,6 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
                     pokedexAdapter.notifyDataSetChanged();
                 }
 
-                //System.out.println("Pokemon " +  pokemon.getName() + "pesa: " + pokemon.getWeight());
             }
 
             @Override
