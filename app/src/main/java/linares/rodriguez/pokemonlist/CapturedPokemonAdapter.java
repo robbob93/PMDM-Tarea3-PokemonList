@@ -3,6 +3,7 @@ package linares.rodriguez.pokemonlist;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
     private final List<Pokemon> capturedPokemonList;
     private final Context context;
     private OnPokemonRemovedListener removedListener;
+    private OnItemClickListener itemClickListener;
 
 
 
@@ -27,6 +29,16 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
         this.removedListener = listener;
     }
 
+
+
+    public interface OnItemClickListener {
+        void onItemClick(Pokemon pokemon);
+    }
+
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.itemClickListener = listener;
+    }
 
 
 
@@ -49,6 +61,13 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
         Pokemon pokemon = capturedPokemonList.get(position);
         holder.bind(pokemon);
 
+
+        // Manejar clic en la tarjeta
+        holder.itemView.setOnClickListener(v -> {
+            if (itemClickListener != null) {
+                itemClickListener.onItemClick(pokemon);
+            }
+        });
 /*
         if (removedListener != null) {
             System.out.println("Llamada a quitar pokemon");
@@ -83,10 +102,6 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
         public void bind(Pokemon pokemon) {
             String nombre = pokemon.getName();
             binding.namePokemon.setText(nombre.toUpperCase().charAt(0) + nombre.substring(1, nombre.length()));
-            //nombre.toUpperCase().charAt(0) + nombre.substring(1, nombre.length()).toLowerCase();
-            //binding.indexPokemon.setText(String.valueOf(pokemon.getId()));
-            //binding.alturaPokemon.setText(String.valueOf(pokemon.getHeight()));
-            //binding.pesoPokemon.setText(String.valueOf(pokemon.getWeight()));
 
             Picasso.get().load(pokemon.getImageUrl()).into(binding.imagePokemon);
 

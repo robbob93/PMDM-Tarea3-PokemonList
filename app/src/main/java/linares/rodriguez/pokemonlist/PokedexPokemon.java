@@ -7,8 +7,8 @@ public class PokedexPokemon {
     private int id;
     private String imageUrl;
     private List<String> types;
-    private int weight;
-    private int height;
+    private float weight;
+    private float height;
 
     public PokedexPokemon(String name, int id, String imageUrl, List<String> types, int weight, int height) {
         this.name = name;
@@ -47,19 +47,19 @@ public class PokedexPokemon {
         this.types = types;
     }
 
-    public int getWeight() {
+    public float getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(float weight) {
         this.weight = weight;
     }
 
-    public int getHeight() {
+    public float getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(float height) {
         this.height = height;
     }
 }

@@ -158,8 +158,8 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
                     pokemon.setId(details.getId());
                     pokemon.setImageUrl(details.getImageUrl());
                     //pokemon.setTypes(details.getTypeNames());
-                    pokemon.setWeight(details.getWeight());
-                    pokemon.setHeight(details.getHeight());
+                    pokemon.setWeight(details.getWeight()/10f);
+                    pokemon.setHeight(details.getHeight()/10f);
 
                     // Notifica al adaptador para que actualice la vista
                     pokedexAdapter.notifyDataSetChanged();
