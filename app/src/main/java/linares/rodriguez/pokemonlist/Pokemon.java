@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Pokemon implements Serializable {
 
-    
+
 
     @SerializedName("id")
     private int id;

@@ -41,7 +41,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
         String resourceNameType1 = "label_" + type1.toLowerCase(); // Ejemplo: "label_grass"
         int resourceId = binding.getRoot().getResources().getIdentifier(
                 resourceNameType1, "drawable", binding.getRoot().getContext().getPackageName());
-        System.out.println("Resource Id para pokemon : " + resourceId );
+        //System.out.println("Resource Id para pokemon : " + resourceId );
         binding.imageType.setImageResource(resourceId);
 
 
@@ -50,7 +50,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
             String resourceNameType2 = "label_" + type2.toLowerCase(); // Ejemplo: "label_grass"
             int resourceId2 = binding.getRoot().getResources().getIdentifier(
                     resourceNameType2, "drawable", binding.getRoot().getContext().getPackageName());
-            System.out.println("Resource Id para pokemon : " + resourceId2 );
+            //System.out.println("Resource Id para pokemon : " + resourceId2 );
             binding.imageType2.setImageResource(resourceId2);
 
         }

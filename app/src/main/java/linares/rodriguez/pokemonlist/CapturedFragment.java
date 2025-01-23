@@ -88,6 +88,7 @@ public class CapturedFragment extends Fragment {
     private void setupAdapter() {
         adapter.setOnItemClickListener(pokemon -> {
             ArrayList<String> listaTipos = new ArrayList<>(pokemon.getTypes());
+            System.out.println("Lista tipos: " + listaTipos);
 
             Intent intent = new Intent(getContext(), PokemonDetailActivity.class);
             intent.putExtra("name", pokemon.getName());
@@ -101,7 +102,6 @@ public class CapturedFragment extends Fragment {
 
 
         adapter.setOnPokemonRemovedListener(pokemon -> {
-
             // Eliminar de Firestore
 
             System.out.println("Pokemon " + pokemon.getName()+ " pulsado boton liberar");
