@@ -7,16 +7,17 @@ import java.util.List;
 
 public class Pokemon implements Serializable {
 
+    
 
     @SerializedName("id")
     private int id;
 
     @SerializedName("name")
     private String name;
-/*
+
     @SerializedName("sprites")
     private Sprites sprites;
-*/
+
     @SerializedName("types")
     private List<String> types;
 
@@ -26,6 +27,15 @@ public class Pokemon implements Serializable {
     @SerializedName("height")
     private float height;
 
+
+    public Pokemon(String name, int id, String imageUrl, List<String> types, int weight, int height) {
+        this.name = name;
+        this.id = id;
+        this.imageUrl = imageUrl;
+        this.types = types;
+        this.weight = weight;
+        this.height = height;
+    }
 
 
     // Constructor sin argumentos (requerido por Firestore)
@@ -79,7 +89,7 @@ public class Pokemon implements Serializable {
         return weight;
     }
 
-    public void setPeso(float peso) {
+    public void setWeight(float peso) {
         this.peso = peso;
     }
 
@@ -87,10 +97,18 @@ public class Pokemon implements Serializable {
         return height;
     }
 
-    public void setAltura(float altura) {
+    public void setHeight(float altura) {
         this.altura = altura;
     }
 
+    public static class Sprites {
+        @SerializedName("front_default")
+        private String frontDefault;
+
+        public String getFrontDefault() {
+            return frontDefault;
+        }
+    }
 
 
 }

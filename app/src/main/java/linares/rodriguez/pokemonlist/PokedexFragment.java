@@ -37,7 +37,7 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
 
 
     private PokedexFragmentBinding binding;
-    private List<PokedexPokemon> pokedexList = new ArrayList<>();
+    private List<Pokemon> pokedexList = new ArrayList<>();
     private Retrofit retrofit;
     private PokedexAdapter pokedexAdapter;
     private Set<String> capturedPokemonSet = new HashSet<>();
@@ -79,7 +79,7 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
     /*
     Obtiene la lista de pokemon. Solo su nombre y URL
      */
-    public List<PokedexPokemon> getPokemonList() {
+    public List<Pokemon> getPokemonList() {
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://pokeapi.co/api/v2/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -95,7 +95,7 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
                     List<PokeApiResp.PokemonResult> results = response.body().getResults();
                     for (PokeApiResp.PokemonResult result : results) {
                         // Crea un objeto PokedexPokemon inicial
-                        PokedexPokemon pokemon = new PokedexPokemon(
+                        Pokemon pokemon = new Pokemon(
                                 result.getName(),  // Nombre del Pokémon
                                 0,                 // ID aún no disponible
                                 "",                // URL de imagen aún no disponible
@@ -116,7 +116,7 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
                     // Configura el listener para manejar la captura de Pokémon
                     pokedexAdapter.setOnPokemonCapturedListener(new PokedexAdapter.OnPokemonCapturedListener() {
                         @Override
-                        public void onPokemonCaptured(PokedexPokemon pokemon) {
+                        public void onPokemonCaptured(Pokemon pokemon) {
                             // Agrega el Pokémon al conjunto de capturados
                             capturedPokemonSet.add(pokemon.getName());
                             System.out.println("Se ha capturado el pokemon: " + pokemon.getName());
@@ -141,7 +141,7 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
         return pokedexList;
     }
 
-    private void fetchPokemonDetails(String url, PokedexPokemon pokemon) {
+    private void fetchPokemonDetails(String url, Pokemon pokemon) {
         PokeApiService apiService = retrofit.create(PokeApiService.class);
 
         // Extrae el nombre del Pokémon desde la URL
@@ -175,7 +175,7 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
 
     }
 
-    private void saveCapturedPokemonToFirestore(PokedexPokemon pokemon) {
+    private void saveCapturedPokemonToFirestore(Pokemon pokemon) {
         database.collection("capturados")
                 .add(pokemon).addOnSuccessListener(runnable ->
                         Toast.makeText(getContext(),"Saved Successfully", Toast.LENGTH_SHORT).show())
@@ -219,7 +219,7 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
     }
 
     @Override
-    public void onPokemonCaptured(PokedexPokemon pokemon) {
+    public void onPokemonCaptured(Pokemon pokemon) {
 
     }
 
