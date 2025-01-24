@@ -3,6 +3,7 @@ package linares.rodriguez.pokemonlist;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,8 +12,17 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import linares.rodriguez.pokemonlist.databinding.ActivityMainBinding;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,6 +61,49 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
+
+
+    private void loadInitialData() {
+        PokeApiService apiService = APIClient.getClient().create(PokeApiService.class);
+
+        // Descarga lista completa de Pokémon
+        apiService.getPokemonList(0, 100).enqueue(new Callback<PokeApiResp>() {
+            @Override
+            public void onResponse(Call<PokeApiResp> call, Response<PokeApiResp> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Pokemon> pokemonList = new ArrayList<>();
+                    for (PokeApiResp.PokemonResult result : response.body().getResults()) {
+                        pokemonList.add(new Pokemon(result.getName()));
+                    }
+                    PokemonManager.getInstance().setPokemonList(pokemonList);
+
+                    // Después de cargar los Pokémon, carga los capturados
+                    loadCapturedPokemon();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PokeApiResp> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Error al cargar los Pokémon", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadCapturedPokemon() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("captured_pokemon")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        for (DocumentSnapshot doc : task.getResult()) {
+                            Pokemon pokemon = doc.toObject(Pokemon.class);
+                            PokemonManager.getInstance().addCapturedPokemon(pokemon);
+                        }
+                    }
+                });
+    }
 
 
 

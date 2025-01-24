@@ -27,6 +27,7 @@ public class Pokemon implements Serializable {
     private float height;
 
     private List<String> typeNames;
+    private boolean captured;
 
     // Constructor vacío (necesario para Firestore y otras librerías)
     public Pokemon() {
