@@ -96,17 +96,13 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
                     for (PokeApiResp.PokemonResult result : results) {
                         // Crea un objeto PokedexPokemon inicial
                         Pokemon pokemon = new Pokemon(
-                                result.getName(),  // Nombre del Pokémon
-                                0,                 // ID aún no disponible
-                                "",                // URL de imagen aún no disponible
-                                new ArrayList<>(), // Tipos aún no disponibles
-                                0,                 // Peso aún no disponible
-                                0                  // Altura aún no disponible
+                                result.getName() // Nombre del Pokémon
                         );
 
                         // Añádelo a la lista y llama a fetchPokemonDetails para completar los detalles
                         pokedexList.add(pokemon);
                         fetchPokemonDetails(result.getUrl(), pokemon);
+
                         //System.out.println("Pokemon: " + result.getName() + " tiene la URL: " + result.getUrl());
                     }
 
@@ -146,20 +142,21 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
 
         // Extrae el nombre del Pokémon desde la URL
         String pokemonName = url.substring(url.lastIndexOf("/", url.length() - 2) + 1, url.length() - 1);
-
-        Call<PokemonDetails> call = apiService.getPokemonDetails(pokemonName);
-        call.enqueue(new Callback<PokemonDetails>() {
+        Call<Pokemon> call = apiService.getPokemonDetails(pokemonName);
+        call.enqueue(new Callback<Pokemon>() {
             @Override
-            public void onResponse(Call<PokemonDetails> call, Response<PokemonDetails> response) {
+            public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    PokemonDetails details = response.body();
-
+                    Pokemon details = response.body();
+                    System.out.println("Tipos del pokemon " + details.getName() +  " en details: " + details.getTypes());
                     // Actualiza el Pokémon con los detalles adicionales
                     pokemon.setId(details.getId());
                     pokemon.setImageUrl(details.getImageUrl());
-                    pokemon.setTypes(details.getTypeNames());
+                    pokemon.setTypes(details.getTypes());
                     pokemon.setWeight(details.getWeight()/10f);
                     pokemon.setHeight(details.getHeight()/10f);
+
+                    System.out.println("Tipos del pokemon " + pokemon.getName() +  " en Pokemon : " + pokemon.getTypesNames());
 
                     // Notifica al adaptador para que actualice la vista
                     pokedexAdapter.notifyDataSetChanged();
@@ -168,7 +165,8 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
             }
 
             @Override
-            public void onFailure(Call<PokemonDetails> call, Throwable t) {
+            public void onFailure(Call<Pokemon> call, Throwable t) {
+                System.out.println("HA HABIDO UN FALLO EN LA LLAMADA");
                 t.printStackTrace();
             }
         });

@@ -1,29 +1,16 @@
 package linares.rodriguez.pokemonlist;
 
-import android.content.Intent;
+
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-
-import java.util.Arrays;
-import java.util.List;
 
 import linares.rodriguez.pokemonlist.databinding.ActivityMainBinding;
 
@@ -32,9 +19,6 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
     NavController navController = null;
-
-
-
 
 
     @Override
@@ -49,13 +33,9 @@ public class MainActivity extends AppCompatActivity {
         if(navHostFragment != null){
             navController = NavHostFragment.findNavController(navHostFragment);
             NavigationUI.setupWithNavController(binding.bottomNavigationView, navController);
-            //NavigationUI.setupActionBarWithNavController(this, navController);
             navController.navigate(R.id.capturedPokemon);
         }
         binding.bottomNavigationView.setOnItemSelectedListener(this::selectedBottonMenu);
-        //configureActionBar();
-
-        //binding.logoutButton.setOnClickListener(this::logoutSession);
 
 
     }
@@ -71,21 +51,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void logoutSession(View view) {
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(view.getContext(),"Sesion cerrada", Toast.LENGTH_SHORT).show();
-                        goToLogin();
-                    }
-                });
 
-    }
 
-    private void goToLogin() {
-        Intent i = new Intent(this, LoginActivity.class);
-        startActivity(i);
-        finish();
-    }
+
 }

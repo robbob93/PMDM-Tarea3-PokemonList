@@ -6,13 +6,10 @@ import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -63,24 +60,33 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
 
     @Override
     public void onBindViewHolder(@NonNull CapturedViewHolder holder, int position) {
+        System.out.println("Tamaño capturedPokemonList: " + capturedPokemonList.size());
         Pokemon pokemon = capturedPokemonList.get(position);
         holder.bind(pokemon);
-        System.out.println("Bindeando pokemon " +  pokemon.getName() + "Con tipos: " + pokemon.getTypes());
+        System.out.println("Bindeando pokemon " +  pokemon.getName() + "Con tipos: " + pokemon.getTypesNames());
+        List<String> types = pokemon.getTypesNames();
         // Construir el nombre del recurso basado en el tipo
-        String type = pokemon.getTypes().get(0);
-        String resourceNameType1 = "label_" + type.toLowerCase(); // Ejemplo: "label_grass"
+
+
+
+        String type1 = types.get(0);
+        String resourceNameType1 = "label_" + type1.toLowerCase(); // Ejemplo: "label_grass"
         System.out.println(pokemon.getName()+" Buscando label: " +  resourceNameType1);
         // Obtener el ID del recurso dinámicamente
         int resourceId = holder.itemView.getContext().getResources().getIdentifier(
                 resourceNameType1, "drawable", holder.itemView.getContext().getPackageName());
         System.out.println("Resource Id para pokemon " + pokemon.getName()+ ": " + resourceId);
 
+
+
         holder.binding.imageType.setImageResource(resourceId);
+
+
         //Hacer invisible porque mantenía imagen de pokemon anteriores
         holder.binding.imageType2.setVisibility(View.INVISIBLE);
         if(pokemon.getTypes().size()>1){
             holder.binding.imageType2.setVisibility(View.VISIBLE);
-            String type2 = pokemon.getTypes().get(1);
+            String type2 = types.get(1);
             String resourceNameType2 = "label_" + type2.toLowerCase(); // Ejemplo: "label_grass"
             int resourceId2 = holder.itemView.getContext().getResources().getIdentifier(
                     resourceNameType2, "drawable", holder.itemView.getContext().getPackageName());

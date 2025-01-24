@@ -72,7 +72,7 @@ public class CapturedFragment extends Fragment {
                 capturedPokemonList.sort(Comparator.comparingInt(pokemon -> pokemon.getId()));
                 System.out.println("Pokemon capturados tipos: ");
                 if(capturedPokemonList.size()>0){
-                    System.out.println(capturedPokemonList.get(0).getTypes().toString());
+                    System.out.println("EN FETCH FROM FIRESTORE"+ capturedPokemonList.get(0).getTypesNames());
                 }
                 adapter.notifyDataSetChanged();
                 System.out.println("Tamaño lista recuperada de firestore: " + capturedPokemonList.size());
@@ -87,7 +87,7 @@ public class CapturedFragment extends Fragment {
 
     private void setupAdapter() {
         adapter.setOnItemClickListener(pokemon -> {
-            ArrayList<String> listaTipos = new ArrayList<>(pokemon.getTypes());
+            ArrayList<String> listaTipos = new ArrayList<>(pokemon.getTypesNames());
             System.out.println("Lista tipos: " + listaTipos);
 
             Intent intent = new Intent(getContext(), PokemonDetailActivity.class);
@@ -95,6 +95,8 @@ public class CapturedFragment extends Fragment {
             intent.putExtra("id", String.valueOf(pokemon.getId()));
             intent.putExtra("types", listaTipos);
             intent.putExtra("height", String.valueOf(pokemon.getHeight()));
+
+            System.out.println("PESO DE " + pokemon.getName() + " : " +  pokemon.getWeight());
             intent.putExtra("weight", String.valueOf(pokemon.getWeight()));
             intent.putExtra("imageUrl", pokemon.getImageUrl());
             startActivity(intent);

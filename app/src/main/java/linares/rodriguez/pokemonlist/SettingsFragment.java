@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +17,9 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.Locale;
 
@@ -56,8 +61,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         about.setOnPreferenceClickListener(preference ->
                 showAboutDialog());
-
+        logout.setOnPreferenceClickListener(this::logoutSession);
     }
+
 
     private boolean showAboutDialog() {
             new AlertDialog.Builder(getContext())
@@ -81,4 +87,24 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             //getActivity().recreate();
 
         }
+
+
+    private boolean logoutSession(Preference preference) {
+        AuthUI.getInstance()
+                .signOut(getContext())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(preference.getContext(),"Sesion cerrada", Toast.LENGTH_SHORT).show();
+                        goToLogin();
+                    }
+                });
+        return true;
+    }
+
+    private void goToLogin() {
+        Intent i = new Intent(getContext(), LoginActivity.class);
+        startActivity(i);
+        getActivity().finish();
+        //finish();  No funciona, pero hay que finalizar la actividad
+    }
 }
