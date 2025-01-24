@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">PokemonList</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="close_session">Close session</string>
+    <string name="about">About...</string>
+    <string name="language">language</string>
+    <string name="enable_release_pokemon">Enable release pokemon</string>
+    <string name="type_s">Type(s):</string>
+    <string name="height">Height:</string>
+    <string name="weight">Weight:</string>
 </resources>
