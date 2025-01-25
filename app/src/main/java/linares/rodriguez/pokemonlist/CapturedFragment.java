@@ -37,10 +37,8 @@ public class CapturedFragment extends Fragment {
         boolean canDelete = preferences.getBoolean("canDelete", false); // false es el valor predeterminado
 
         // Recuperación de los pokemon almacenados por PokemonManager
-        capturedPokemonList = pokemonManager.getCapturedList();
-        for(int i=0;i<capturedPokemonList.size();i++){
-            System.out.println(capturedPokemonList.get(i).getName() + " con id en capturedFragment " + capturedPokemonList.get(i).getId() +  " y url " + capturedPokemonList.get(i).getImageUrl());
-        }
+        //capturedPokemonList = pokemonManager.getCapturedList();
+
 
 
         // Configura RecyclerView
@@ -48,9 +46,35 @@ public class CapturedFragment extends Fragment {
         adapter = new CapturedPokemonAdapter(capturedPokemonList, getContext());
 
         binding.capturedRecyclerView.setAdapter(adapter);
+
+        loadCapturedPokemon();
+
+
         setupAdapter();
 
         return binding.getRoot();
+    }
+
+    private void loadCapturedPokemon() {
+        binding.progressBar.setVisibility(View.VISIBLE);
+        pokemonManager.loadCapturedList(success -> {
+            if (success) {
+                binding.progressBar.setVisibility(View.INVISIBLE);
+                capturedPokemonList.clear();
+                capturedPokemonList.addAll(pokemonManager.getCapturedList()); // Actualizar la lista
+                capturedPokemonList.sort(Comparator.comparingInt(pokemon -> pokemon.getId()));
+                System.out.println("En loadCapturedPokemon de CapturedFragment : ");
+                for (Pokemon poke:capturedPokemonList) {
+                    System.out.println(poke.getName() +  " con id" + poke.getId());
+                }
+                adapter.notifyDataSetChanged(); // Notificar al adaptador
+                System.out.println("Lista de capturados actualizada con éxito");
+
+            } else {
+                Toast.makeText(requireContext(), "Error al cargar los Pokémon capturados", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
 
@@ -101,11 +125,13 @@ public class CapturedFragment extends Fragment {
                                     .addOnSuccessListener(runnable ->
                                             System.out.println("Borrado pokemon"))
 
+
                                     .addOnFailureListener(runnable ->
                                             System.out.println("No se pudo borrar el pokemon")
                                     );
 
                             capturedPokemonList.remove(pokemon);
+
                             adapter.notifyDataSetChanged(); // Actualiza el RecyclerView
                             Toast.makeText(getContext(), String.format("Pokemon %s liberado", pokemon.getName()), Toast.LENGTH_SHORT).show();
                         }

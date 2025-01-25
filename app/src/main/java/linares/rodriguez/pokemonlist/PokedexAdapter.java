@@ -74,10 +74,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
         System.out.println("Tamaño de capturados: " +  pokemonManager.getCapturedList().size());
 
 
-
-
         // Cambiar color si está capturado
-        //System.out.println("Tamaño del Set: " +  capturedPokemonSet.size());
         if (isCaptured) {
             holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.captured_color));
         } else {
@@ -90,6 +87,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
                 pokemonManager.capturePokemon(pokemon, new PokemonManager.OnCaptureListener() {
                     @Override
                     public void onSuccess() {
+                        holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.captured_color));
                         listener.onPokemonCaptured(pokemon); // Refrescar la lista
                     }
 

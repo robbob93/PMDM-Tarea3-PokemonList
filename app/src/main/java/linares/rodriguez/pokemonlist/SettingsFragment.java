@@ -1,6 +1,7 @@
 package linares.rodriguez.pokemonlist;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreferenceCompat;
 
 
@@ -44,18 +46,35 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Preference logout = findPreference("logout");
 
 
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String savedLanguage = preferences.getString("language", "en"); // "en" es el valor predeterminado
+
+        System.out.println("el lenguaje guardado es: " + savedLanguage);
+        boolean isEnglish = savedLanguage.equals("en");
+
+        if (languageSwitch != null) {
+            languageSwitch.setChecked(isEnglish);
+        }
+
         if (languageSwitch != null) {
             // Agrega un listener para manejar los cambios en el idioma
             languageSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
-                boolean isEnglish = (boolean) newValue;
-                setLocale(isEnglish ? "en" : "es");
+                boolean isEnglishSelected = (boolean) newValue;
+                String selectedLanguage = isEnglishSelected ? "en" : "es";
+                setLocale(selectedLanguage);
+                // Guarda el idioma seleccionado en SharedPreferences
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("language", selectedLanguage);
+                editor.apply();
 
+                 // Actualiza los títulos de las preferencias
                 languageSwitch.setTitle(R.string.language);
                 about.setTitle(R.string.about);
                 canDeleteSwitch.setTitle(R.string.enable_release_pokemon);
                 logout.setTitle(R.string.close_session);
-                return true;
 
+                return true;
             });
         }
 
@@ -63,6 +82,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 showAboutDialog());
         logout.setOnPreferenceClickListener(this::logoutSession);
     }
+
 
 
     private boolean showAboutDialog() {

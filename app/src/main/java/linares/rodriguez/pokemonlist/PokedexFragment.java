@@ -51,14 +51,31 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        binding.recyclerViewPokedex.setVisibility(View.GONE); // Ocultar RecyclerView temporalmente
+
+        pokemonManager.loadCapturedList(success -> {
+            if (success) {
+                pokedexAdapter.notifyDataSetChanged();
+                binding.recyclerViewPokedex.setVisibility(View.VISIBLE); // Mostrar RecyclerView
+            }
+        });
+    }
+
+    @Override
     public void onPokemonCaptured(Pokemon pokemon) {
         pokemonManager.capturePokemon(pokemon, new PokemonManager.OnCaptureListener() {
             @Override
             public void onSuccess() {
-                //pokemonManager.loadCapturedList();
-
+                pokemonManager.loadCapturedList(success -> {
+                    if (success) {
+                        pokedexAdapter.notifyDataSetChanged(); // Actualizar la vista
+                    } else {
+                        Toast.makeText(requireContext(), "Error al cargar la lista de capturados", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 System.out.println("Pokemon capturado. Tamaño de lista: " +  pokemonManager.getCapturedList().size());
-                pokedexAdapter.notifyDataSetChanged(); // Actualizar la vista
             }
 
             @Override
@@ -68,9 +85,8 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
         });
 
     }
-
-
-
-
+    public void updatePokedexList() {
+        pokedexAdapter.notifyDataSetChanged();
+    }
 
 }

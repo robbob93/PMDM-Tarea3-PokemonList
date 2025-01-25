@@ -1,10 +1,13 @@
 package linares.rodriguez.pokemonlist;
 
 
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.MenuItem;
-import android.widget.Toast;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,18 +15,12 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
+import androidx.preference.PreferenceManager;
 
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Locale;
 
 import linares.rodriguez.pokemonlist.databinding.ActivityMainBinding;
-import retrofit2.Response;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,20 +35,12 @@ public class MainActivity extends AppCompatActivity {
 
         PokemonManager pokemonManager = PokemonManager.getInstance();
         pokemonManager.loadPokemonDataFromApi();
-        pokemonManager.loadCapturedList(success -> {
-            if (success) {
-                // Carga exitosa: puedes dejar este bloque vacío o agregar un log
-                Log.d("MainActivity", "Lista de Pokémon capturados cargada exitosamente.");
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String savedLanguage = preferences.getString("language", "en"); // "en" es el valor predeterminado
 
-
-
-            } else {
-                // Manejar error en la carga
-                Toast.makeText(this, "Error al cargar la lista de capturados.", Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        // Aplicar el idioma guardado
+        setLocale(savedLanguage);
 
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -62,10 +51,20 @@ public class MainActivity extends AppCompatActivity {
         if(navHostFragment != null){
             navController = NavHostFragment.findNavController(navHostFragment);
             NavigationUI.setupWithNavController(binding.bottomNavigationView, navController);
-            //navController.navigate(R.id.capturedPokemon);
             navController.navigate(R.id.capturedPokemon);
         }
         binding.bottomNavigationView.setOnItemSelectedListener(this::selectedBottonMenu);
+
+
+    }
+
+    private void setLocale(String language) {
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Resources resources = getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
 
 
     }
@@ -80,53 +79,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
-
-
-
-/*
-    private void loadInitialData() {
-        PokeApiService apiService = APIClient.getClient().create(PokeApiService.class);
-
-        // Descarga lista completa de Pokémon
-        apiService.getPokemonList(0, 100).enqueue(new Callback<PokeApiResp>() {
-            @Override
-            public void onResponse(Call<PokeApiResp> call, Response<PokeApiResp> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<Pokemon> pokemonList = new ArrayList<>();
-                    for (PokeApiResp.PokemonResult result : response.body().getResults()) {
-                        pokemonList.add(new Pokemon(result.getName()));
-                    }
-                    PokemonManager.getInstance().setPokemonList(pokemonList);
-
-                    // Después de cargar los Pokémon, carga los capturados
-                    loadCapturedPokemon();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<PokeApiResp> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Error al cargar los Pokémon", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void loadCapturedPokemon() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        db.collection("captured_pokemon")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        for (DocumentSnapshot doc : task.getResult()) {
-                            Pokemon pokemon = doc.toObject(Pokemon.class);
-                            PokemonManager.getInstance().addCapturedPokemon(pokemon);
-                        }
-                    }
-                });
-    }
-
-
- */
 
 
 }
