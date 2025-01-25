@@ -80,9 +80,22 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         about.setOnPreferenceClickListener(preference ->
                 showAboutDialog());
-        logout.setOnPreferenceClickListener(this::logoutSession);
+        logout.setOnPreferenceClickListener(this::showLogoutConfirmationDialog);
     }
 
+    private boolean showLogoutConfirmationDialog(Preference preference) {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Salir de la aplicación")
+                .setMessage("¿Está segur@ de querer salir?")
+                .setPositiveButton("Sí", (dialog, which) -> {
+                    logoutSession(preference);
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    dialog.dismiss(); // Solo cerrar el diálogo
+                })
+                .show();
+        return true;
+    }
 
 
     private boolean showAboutDialog() {
