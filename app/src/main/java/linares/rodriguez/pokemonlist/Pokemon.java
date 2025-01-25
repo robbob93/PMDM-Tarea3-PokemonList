@@ -54,8 +54,7 @@ public class Pokemon implements Serializable {
         this.height = height;
     }
 
-
-
+    //Constructor con solo el nombre para la lista de Pokedex
     public Pokemon(String name){
         this.name = name;
     }
@@ -103,9 +102,7 @@ public class Pokemon implements Serializable {
         return transformToListTypeNames();
     }
 
-    public void setTypesNames(List<String> types) {
-        this.typesNames = types;
-    }
+
 
 
 
@@ -143,7 +140,7 @@ public class Pokemon implements Serializable {
         }
     }
 
-    // Clase interna TypeEntry (similar a la que ya tenías en `PokemonDetails`)
+    // Clase interna TypeEntry 
     public static class TypeEntry {
         @SerializedName("type")
         private Type type;
@@ -181,17 +178,5 @@ public class Pokemon implements Serializable {
             }
         }
         return typeNames;
-    }
-
-    public static List<TypeEntry> convertTypeNamesToEntries(List<String> typeNames) {
-        List<TypeEntry> typeEntries = new ArrayList<>();
-        for (String name : typeNames) {
-            TypeEntry.Type type = new TypeEntry.Type();
-            type.setName(name); // Necesitas agregar un setter en la clase Type
-            TypeEntry entry = new TypeEntry();
-            entry.setType(type); // Necesitas agregar un setter en la clase TypeEntry
-            typeEntries.add(entry);
-        }
-        return typeEntries;
     }
 }

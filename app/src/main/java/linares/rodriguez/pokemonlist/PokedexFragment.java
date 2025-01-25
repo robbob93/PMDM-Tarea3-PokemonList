@@ -85,8 +85,5 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
         });
 
     }
-    public void updatePokedexList() {
-        pokedexAdapter.notifyDataSetChanged();
-    }
 
 }
