@@ -28,7 +28,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PokemonManager {
 
     private static PokemonManager instance;
-    private List<Pokemon> pokemonList; // Lista de Pokémon accesible globalmente
+    private List<Pokemon> pokemonList; // Lista de Pokémon compartida globalmente
 
 
 
@@ -60,10 +60,6 @@ public class PokemonManager {
     }
 
     private final List<Runnable> capturedListListeners = new ArrayList<>();
-
-    public void addCapturedListListener(Runnable listener) {
-        capturedListListeners.add(listener);
-    }
 
     private void notifyCapturedListUpdated() {
         for (Runnable listener : capturedListListeners) {
@@ -159,13 +155,40 @@ public class PokemonManager {
 
 
 
-    private void removeCapturedPokemonFromFirestore(Pokemon pokemon) {
-        firestore.collection("capturados")
-                .document(pokemon.getName())
-                .delete()
-                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Pokemon liberado eliminado con éxito."))
-                .addOnFailureListener(e -> Log.e("Firestore", "Error al eliminar el Pokémon liberado.", e));
+    public void releasePokemon(Pokemon pokemon, OnReleaseListener listener) {
+        // Eliminar de Firestore
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        database.collection("capturados").whereEqualTo("id", pokemon.getId())
+                .get().addOnSuccessListener(querySnapshot -> {
+                    if (querySnapshot.isEmpty()) {
+                        listener.onFailure(new Exception("No se pudo encontrar el Pokémon en Firestore"));
+                    } else {
+                        querySnapshot.getDocuments().get(0).getReference().delete()
+                                .addOnSuccessListener(runnable -> {
+
+                                    System.out.println("TAMAÑO CAPTUREDlIST EN POKEMONMANAGER " +  capturedList.size());
+                                    // Eliminar de la lista local
+                                    capturedList.remove(pokemon);
+                                    System.out.println("TAMAÑO CAPTUREDlIST EN POKEMONMANAGER después" +  capturedList.size());
+                                    listener.onSuccess(pokemon); // Pasar el Pokémon eliminado
+                                })
+                                .addOnFailureListener(e -> {
+                                    listener.onFailure(new Exception("No se pudo borrar el Pokémon en Firestore"));
+                                });
+                    }
+                });
     }
+
+    // Interfaz para escuchar los resultados de la liberación
+    public interface OnReleaseListener {
+        void onSuccess(Pokemon pokemon);
+        void onFailure(Exception e);
+    }
+
+
+
+
+
 
     public interface OnCaptureListener {
         void onSuccess();

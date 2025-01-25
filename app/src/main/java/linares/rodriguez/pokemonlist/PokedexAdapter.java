@@ -10,20 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import linares.rodriguez.pokemonlist.databinding.CardviewPokedexBinding;
 
 public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexViewHolder> {
 
     private List<Pokemon> pokedexList;
-
     private Context context;
     private OnPokemonCapturedListener listener;
     PokemonManager pokemonManager = PokemonManager.getInstance();
-    private final List<OnCapturedListUpdateListener> listeners = new ArrayList<>();
+
 
     public interface OnPokemonCapturedListener {
         void onPokemonCaptured(Pokemon pokemon);
@@ -31,27 +28,12 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
 
     public void setOnPokemonCapturedListener(OnPokemonCapturedListener listener) {
         this.listener = listener;
-        System.out.println("Listener configurado: " + (listener != null)); // Agrega esta línea para verificar
     }
 
 
     public PokedexAdapter(List<Pokemon> pokedexList, Context context) {
         this.pokedexList = pokedexList;
         this.context = context;
-    }
-
-    public void addOnCapturedListUpdateListener(OnCapturedListUpdateListener listener) {
-        listeners.add(listener);
-    }
-
-    public void notifyCapturedListUpdated() {
-        for (OnCapturedListUpdateListener listener : listeners) {
-            listener.onCapturedListUpdated();
-        }
-    }
-
-    public interface OnCapturedListUpdateListener {
-        void onCapturedListUpdated();
     }
 
 

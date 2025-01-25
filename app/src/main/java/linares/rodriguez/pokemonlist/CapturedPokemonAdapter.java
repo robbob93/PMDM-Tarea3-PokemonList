@@ -22,7 +22,6 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
     private OnPokemonRemovedListener removedListener;
     private OnItemClickListener itemClickListener;
     private boolean canDelete;
-    PokemonManager pokemonManager = PokemonManager.getInstance();
 
 
 
@@ -48,7 +47,6 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
     public CapturedPokemonAdapter(List<Pokemon> capturedPokemonList, Context context) {
         this.capturedPokemonList = capturedPokemonList;
         this.context = context;
-        this.canDelete = canDelete;
     }
 
     @NonNull
@@ -63,7 +61,6 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
     public void onBindViewHolder(@NonNull CapturedViewHolder holder, int position) {
         System.out.println("Tamaño capturedPokemonList: " + capturedPokemonList.size());
         Pokemon pokemon = capturedPokemonList.get(position);
-        //Pokemon pokemon = capturedPokemonList.get(position);
         holder.bind(pokemon);
         System.out.println("Bindeando pokemon " +  pokemon.getName() + " Con tipos: " + pokemon.getTypesNames());
         List<String> types = pokemon.getTypesNames();

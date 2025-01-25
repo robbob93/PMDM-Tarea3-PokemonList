@@ -27,19 +27,11 @@ public class CapturedFragment extends Fragment {
     private FragmentCapturedBinding binding;
     private CapturedPokemonAdapter adapter;
     private List<Pokemon> capturedPokemonList = new ArrayList<>();
-    private PokemonManager pokemonManager = PokemonManager.getInstance();
+    private final PokemonManager pokemonManager = PokemonManager.getInstance();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentCapturedBinding.inflate(inflater, container, false);
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-        boolean canDelete = preferences.getBoolean("canDelete", false); // false es el valor predeterminado
-
-        // Recuperación de los pokemon almacenados por PokemonManager
-        //capturedPokemonList = pokemonManager.getCapturedList();
-
-
 
         // Configura RecyclerView
         binding.capturedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -48,7 +40,6 @@ public class CapturedFragment extends Fragment {
         binding.capturedRecyclerView.setAdapter(adapter);
 
         loadCapturedPokemon();
-
 
         setupAdapter();
 
@@ -63,12 +54,8 @@ public class CapturedFragment extends Fragment {
                 capturedPokemonList.clear();
                 capturedPokemonList.addAll(pokemonManager.getCapturedList()); // Actualizar la lista
                 capturedPokemonList.sort(Comparator.comparingInt(pokemon -> pokemon.getId()));
-                System.out.println("En loadCapturedPokemon de CapturedFragment : ");
-                for (Pokemon poke:capturedPokemonList) {
-                    System.out.println(poke.getName() +  " con id" + poke.getId());
-                }
                 adapter.notifyDataSetChanged(); // Notificar al adaptador
-                System.out.println("Lista de capturados actualizada con éxito");
+
 
             } else {
                 Toast.makeText(requireContext(), "Error al cargar los Pokémon capturados", Toast.LENGTH_SHORT).show();
@@ -112,31 +99,22 @@ public class CapturedFragment extends Fragment {
 
 
         adapter.setOnPokemonRemovedListener(pokemon -> {
-            // Eliminar de Firestore
+            pokemonManager.releasePokemon(pokemon, new PokemonManager.OnReleaseListener() {
+                @Override
+                public void onSuccess(Pokemon pokemon) {
 
-            System.out.println("Pokemon " + pokemon.getName()+ " pulsado boton liberar");
-            FirebaseFirestore database = FirebaseFirestore.getInstance();
-            database.collection("capturados").whereEqualTo("id", pokemon.getId())
-                    .get().addOnSuccessListener(querySnapshot ->  {
-                        if(querySnapshot.isEmpty()){
-                            Toast.makeText(getContext(), "No se pudo eliminar el pokemon", Toast.LENGTH_SHORT).show();
-                        }else{
-                            querySnapshot.getDocuments().get(0).getReference().delete()
-                                    .addOnSuccessListener(runnable ->
-                                            System.out.println("Borrado pokemon"))
+                    capturedPokemonList.remove(pokemon); //quitado pokemon dado que ha sido satifactorio quitarlo de Firestore
+                    Toast.makeText(getContext(), String.format("Pokemon %s liberado", pokemon.getName()), Toast.LENGTH_SHORT).show();
+                    adapter.notifyDataSetChanged(); // Aquí notificacion al adaptador que la lista ha cambiado
+                }
 
-
-                                    .addOnFailureListener(runnable ->
-                                            System.out.println("No se pudo borrar el pokemon")
-                                    );
-
-                            capturedPokemonList.remove(pokemon);
-
-                            adapter.notifyDataSetChanged(); // Actualiza el RecyclerView
-                            Toast.makeText(getContext(), String.format("Pokemon %s liberado", pokemon.getName()), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                @Override
+                public void onFailure(Exception e) {
+                    Toast.makeText(getContext(), "Error al liberar el Pokémon: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
         });
+
     }
 
 }
