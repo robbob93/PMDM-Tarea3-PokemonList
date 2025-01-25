@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -17,9 +18,10 @@ import linares.rodriguez.pokemonlist.databinding.CardviewPokedexBinding;
 public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexViewHolder> {
 
     private List<Pokemon> pokedexList;
-    private Set<String> capturedPokemonSet;
+
     private Context context;
     private OnPokemonCapturedListener listener;
+    PokemonManager pokemonManager = PokemonManager.getInstance();
 
     public interface OnPokemonCapturedListener {
         void onPokemonCaptured(Pokemon pokemon);
@@ -31,9 +33,8 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
     }
 
 
-    public PokedexAdapter(List<Pokemon> pokedexList, Set<String> capturedPokemonSet, Context context) {
+    public PokedexAdapter(List<Pokemon> pokedexList, Context context) {
         this.pokedexList = pokedexList;
-        this.capturedPokemonSet = capturedPokemonSet;
         this.context = context;
     }
 
@@ -49,14 +50,19 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
     @Override
     public void onBindViewHolder(@NonNull PokedexViewHolder holder, int position) {
         Pokemon pokemon = pokedexList.get(position);
-        holder.bind(pokemon, capturedPokemonSet.contains(pokemon.getName()));
+
+        boolean isCaptured = pokemonManager.isPokemonCaptured(pokemon);
+        System.out.println("pokemon " +  pokemon.getName() + "Está capturado? " +  isCaptured);
+
+        holder.bind(pokemon, isCaptured);
+        System.out.println("Tamaño de capturados: " +  pokemonManager.getCapturedList().size());
 
 
 
 
         // Cambiar color si está capturado
         //System.out.println("Tamaño del Set: " +  capturedPokemonSet.size());
-        if (capturedPokemonSet.contains(pokemon.getName())) {
+        if (isCaptured) {
             holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.captured_color));
         } else {
             holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.default_color));
@@ -64,15 +70,18 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
 
         // Manejar clic en la tarjeta
         holder.itemView.setOnClickListener(v -> {
-            if (!capturedPokemonSet.contains(pokemon.getName())) {
-                capturedPokemonSet.add(pokemon.getName()); // Añadir a capturados
-                if (listener != null) {
-                    listener.onPokemonCaptured(pokemon); // Notificar al fragmento
-                    System.out.println("Fragmento notificado");
-                }else{
-                    System.out.println("Listener es nulo");
-                }
-                notifyItemChanged(position);
+            if (!isCaptured) {
+                pokemonManager.capturePokemon(pokemon, new PokemonManager.OnCaptureListener() {
+                    @Override
+                    public void onSuccess() {
+                        listener.onPokemonCaptured(pokemon); // Refrescar la lista
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Toast.makeText(context, "Error al capturar: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }

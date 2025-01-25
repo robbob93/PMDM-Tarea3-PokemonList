@@ -75,11 +75,11 @@ public class CapturedFragment extends Fragment {
                     System.out.println("EN FETCH FROM FIRESTORE"+ capturedPokemonList.get(0).getTypesNames());
                 }
                 adapter.notifyDataSetChanged();
-                System.out.println("Tamaño lista recuperada de firestore: " + capturedPokemonList.size());
+
             } else {
                 Toast.makeText(getContext(), "Error al cargar Pokémon capturados", Toast.LENGTH_SHORT).show();
             }
-            System.out.println("Tamaño lista recuperada de firestore: " + capturedPokemonList.size());
+            System.out.println("Tamaño lista recuperada de firestore en fetch: " + capturedPokemonList.size());
         });
 
     }

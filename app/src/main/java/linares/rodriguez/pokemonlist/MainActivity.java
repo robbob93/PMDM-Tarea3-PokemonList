@@ -2,6 +2,7 @@ package linares.rodriguez.pokemonlist;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -35,6 +36,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        PokemonManager pokemonManager = PokemonManager.getInstance();
+        pokemonManager.loadPokemonDataFromApi();
+        pokemonManager.loadCapturedList(success -> {
+            if (success) {
+                // Carga exitosa: puedes dejar este bloque vacío o agregar un log
+                Log.d("MainActivity", "Lista de Pokémon capturados cargada exitosamente.");
+            } else {
+                // Manejar error en la carga
+                Toast.makeText(this, "Error al cargar la lista de capturados.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -43,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
         if(navHostFragment != null){
             navController = NavHostFragment.findNavController(navHostFragment);
             NavigationUI.setupWithNavController(binding.bottomNavigationView, navController);
-            navController.navigate(R.id.capturedPokemon);
+            //navController.navigate(R.id.capturedPokemon);
+            navController.navigate(R.id.pokedexFragment);
         }
         binding.bottomNavigationView.setOnItemSelectedListener(this::selectedBottonMenu);
 
@@ -63,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+/*
     private void loadInitialData() {
         PokeApiService apiService = APIClient.getClient().create(PokeApiService.class);
 
@@ -105,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+
+ */
 
 
 }

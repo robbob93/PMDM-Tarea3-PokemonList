@@ -17,11 +17,12 @@ import java.util.List;
 import linares.rodriguez.pokemonlist.databinding.CardviewCapturedBinding;
 
 public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemonAdapter.CapturedViewHolder> {
-    private final List<Pokemon> capturedPokemonList;
+    private List<Pokemon> capturedPokemonList;
     private final Context context;
     private OnPokemonRemovedListener removedListener;
     private OnItemClickListener itemClickListener;
     private boolean canDelete;
+    PokemonManager pokemonManager = PokemonManager.getInstance();
 
 
 
@@ -61,14 +62,15 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
     @Override
     public void onBindViewHolder(@NonNull CapturedViewHolder holder, int position) {
         System.out.println("Tamaño capturedPokemonList: " + capturedPokemonList.size());
-        Pokemon pokemon = capturedPokemonList.get(position);
+        Pokemon pokemon = pokemonManager.getPokemonList().get(position);
+        //Pokemon pokemon = capturedPokemonList.get(position);
         holder.bind(pokemon);
         System.out.println("Bindeando pokemon " +  pokemon.getName() + "Con tipos: " + pokemon.getTypesNames());
         List<String> types = pokemon.getTypesNames();
         // Construir el nombre del recurso basado en el tipo
 
 
-
+/*
         String type1 = types.get(0);
         String resourceNameType1 = "label_" + type1.toLowerCase(); // Ejemplo: "label_grass"
         System.out.println(pokemon.getName()+" Buscando label: " +  resourceNameType1);
@@ -94,6 +96,8 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
             System.out.println(pokemon.getName()+ " Buscando label tipo2: " +  resourceNameType2);
         }
 
+
+ */
 
         // Manejar clic en la tarjeta
         holder.itemView.setOnClickListener(v -> {
@@ -130,6 +134,7 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
 
         public void bind(Pokemon pokemon) {
             String nombre = pokemon.getName();
+            System.out.println("Nombre de pokemon en bind de CapturedPokemonAdapter: " + nombre);
             binding.namePokemon.setText(nombre.toUpperCase().charAt(0) + nombre.substring(1, nombre.length()));
 
 
