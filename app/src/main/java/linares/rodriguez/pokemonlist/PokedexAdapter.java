@@ -116,7 +116,8 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
         }
 
         public void bind(Pokemon pokemon, boolean isCaptured) {
-            binding.pkName.setText(pokemon.getName());
+            String nombre = pokemon.getName();
+            binding.pkName.setText(nombre.toUpperCase().charAt(0) + nombre.substring(1, nombre.length()));
             itemView.setBackgroundColor(isCaptured ? Color.parseColor("#DFF2BF") : Color.WHITE);
         }
     }
