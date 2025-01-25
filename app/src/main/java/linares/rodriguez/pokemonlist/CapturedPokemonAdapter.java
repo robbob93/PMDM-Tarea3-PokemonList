@@ -62,15 +62,15 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
     @Override
     public void onBindViewHolder(@NonNull CapturedViewHolder holder, int position) {
         System.out.println("Tamaño capturedPokemonList: " + capturedPokemonList.size());
-        Pokemon pokemon = pokemonManager.getPokemonList().get(position);
+        Pokemon pokemon = capturedPokemonList.get(position);
         //Pokemon pokemon = capturedPokemonList.get(position);
         holder.bind(pokemon);
-        System.out.println("Bindeando pokemon " +  pokemon.getName() + "Con tipos: " + pokemon.getTypesNames());
+        System.out.println("Bindeando pokemon " +  pokemon.getName() + " Con tipos: " + pokemon.getTypesNames());
         List<String> types = pokemon.getTypesNames();
         // Construir el nombre del recurso basado en el tipo
 
 
-/*
+
         String type1 = types.get(0);
         String resourceNameType1 = "label_" + type1.toLowerCase(); // Ejemplo: "label_grass"
         System.out.println(pokemon.getName()+" Buscando label: " +  resourceNameType1);
@@ -97,7 +97,7 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
         }
 
 
- */
+
 
         // Manejar clic en la tarjeta
         holder.itemView.setOnClickListener(v -> {
@@ -138,9 +138,7 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
             binding.namePokemon.setText(nombre.toUpperCase().charAt(0) + nombre.substring(1, nombre.length()));
 
 
-
-
-
+            System.out.println("Intentando poner imagen de Picasso en el pokemon " + pokemon.getName() + "imageURL: " + pokemon.getImageUrl() + " id: " + pokemon.getId());
             Picasso.get().load(pokemon.getImageUrl()).into(binding.imagePokemon);
 
             binding.releaseButton.setEnabled(canDelete);

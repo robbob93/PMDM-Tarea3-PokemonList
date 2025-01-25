@@ -42,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
             if (success) {
                 // Carga exitosa: puedes dejar este bloque vacío o agregar un log
                 Log.d("MainActivity", "Lista de Pokémon capturados cargada exitosamente.");
+
+
+
+
             } else {
                 // Manejar error en la carga
                 Toast.makeText(this, "Error al cargar la lista de capturados.", Toast.LENGTH_SHORT).show();
@@ -59,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             navController = NavHostFragment.findNavController(navHostFragment);
             NavigationUI.setupWithNavController(binding.bottomNavigationView, navController);
             //navController.navigate(R.id.capturedPokemon);
-            navController.navigate(R.id.pokedexFragment);
+            navController.navigate(R.id.capturedPokemon);
         }
         binding.bottomNavigationView.setOnItemSelectedListener(this::selectedBottonMenu);
 

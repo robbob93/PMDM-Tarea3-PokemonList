@@ -26,9 +26,9 @@ public class Pokemon implements Serializable {
     @SerializedName("height")
     private float height;
 
-    private List<String> typeNames;
+    private List<String> typesNames;
 
-    // Constructor vacío (necesario para Firestore y otras librerías)
+    // Constructor vacío (necesario para Firestore)
     public Pokemon() {
     }
 
@@ -49,7 +49,7 @@ public class Pokemon implements Serializable {
         this.id = id;
         this.name = name;
         this.sprites = new Sprites(imageUrl); // Creamos la instancia de Sprites
-        this.typeNames = types; // Guardamos la lista de TypeEntry
+        this.typesNames = types; // Guardamos la lista de TypeEntry
         this.weight = weight;
         this.height = height;
     }
@@ -97,16 +97,14 @@ public class Pokemon implements Serializable {
         return types;
     }
 
-    public List<String> getTypesTransform() {
-        return transformToListTypeNames();
-    }
+
 
     public List<String> getTypesNames() {
         return transformToListTypeNames();
     }
 
-    public void setTypeNames(List<String> types) {
-        this.typeNames = types;
+    public void setTypesNames(List<String> types) {
+        this.typesNames = types;
     }
 
 

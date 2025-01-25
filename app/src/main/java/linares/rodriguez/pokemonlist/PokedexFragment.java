@@ -33,19 +33,11 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
         binding = PokedexFragmentBinding.inflate(inflater, container, false);
 
         // Configurar RecyclerView
-        pokedexAdapter = new PokedexAdapter(pokemonManager.getPokemonList(), requireContext());
+        pokedexAdapter = new PokedexAdapter(pokemonManager.getPokemonList(), getContext());
         pokedexAdapter.setOnPokemonCapturedListener(this);
         binding.recyclerViewPokedex.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         binding.recyclerViewPokedex.setAdapter(pokedexAdapter);
-        // Esperar a que se carguen los capturados
-        pokemonManager.loadCapturedList(success -> {
-            if (success) {
-                pokedexAdapter.notifyDataSetChanged(); // Actualizar vista tras cargar capturados
-            } else {
-                Toast.makeText(requireContext(), "Error cargando capturados", Toast.LENGTH_SHORT).show();
-            }
-        });
 
 
         return binding.getRoot();
@@ -65,7 +57,6 @@ public class PokedexFragment extends Fragment implements PokedexAdapter.OnPokemo
             public void onSuccess() {
                 //pokemonManager.loadCapturedList();
 
-                //capturedPokemonSet.add(pokemon.getName());
                 System.out.println("Pokemon capturado. Tamaño de lista: " +  pokemonManager.getCapturedList().size());
                 pokedexAdapter.notifyDataSetChanged(); // Actualizar la vista
             }

@@ -27,6 +27,7 @@ public class CapturedFragment extends Fragment {
     private FragmentCapturedBinding binding;
     private CapturedPokemonAdapter adapter;
     private List<Pokemon> capturedPokemonList = new ArrayList<>();
+    private PokemonManager pokemonManager = PokemonManager.getInstance();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,6 +36,12 @@ public class CapturedFragment extends Fragment {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         boolean canDelete = preferences.getBoolean("canDelete", false); // false es el valor predeterminado
 
+        // Recuperación de los pokemon almacenados por PokemonManager
+        capturedPokemonList = pokemonManager.getCapturedList();
+        for(int i=0;i<capturedPokemonList.size();i++){
+            System.out.println(capturedPokemonList.get(i).getName() + " con id en capturedFragment " + capturedPokemonList.get(i).getId() +  " y url " + capturedPokemonList.get(i).getImageUrl());
+        }
+
 
         // Configura RecyclerView
         binding.capturedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -42,10 +49,11 @@ public class CapturedFragment extends Fragment {
 
         binding.capturedRecyclerView.setAdapter(adapter);
         setupAdapter();
-        // Cargar Pokémon capturados desde Firestore
-        fetchCapturedPokemonFromFirestore();
+
         return binding.getRoot();
     }
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -59,30 +67,6 @@ public class CapturedFragment extends Fragment {
     }
 
 
-    private void fetchCapturedPokemonFromFirestore() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("capturados").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null) {
-                capturedPokemonList.clear();
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    Pokemon pokemon = document.toObject(Pokemon.class);
-                    capturedPokemonList.add(pokemon);
-                }
-                //Ordenación de la lista
-                capturedPokemonList.sort(Comparator.comparingInt(pokemon -> pokemon.getId()));
-                System.out.println("Pokemon capturados tipos: ");
-                if(capturedPokemonList.size()>0){
-                    System.out.println("EN FETCH FROM FIRESTORE"+ capturedPokemonList.get(0).getTypesNames());
-                }
-                adapter.notifyDataSetChanged();
-
-            } else {
-                Toast.makeText(getContext(), "Error al cargar Pokémon capturados", Toast.LENGTH_SHORT).show();
-            }
-            System.out.println("Tamaño lista recuperada de firestore en fetch: " + capturedPokemonList.size());
-        });
-
-    }
 
 
     private void setupAdapter() {

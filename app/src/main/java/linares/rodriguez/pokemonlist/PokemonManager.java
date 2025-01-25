@@ -87,7 +87,7 @@ public class PokemonManager {
                     // Obtiene la lista de Pokémon desde la API
                     List<PokeApiResp.PokemonResult> results = response.body().getResults();
                     for (PokeApiResp.PokemonResult result : results) {
-                        // Crea un objeto PokedexPokemon inicial
+                        // Crea un objeto Pokemon inicial
                         Pokemon pokemon = new Pokemon(
                                 result.getName() // Nombre del Pokémon
                         );
@@ -119,14 +119,30 @@ public class PokemonManager {
                         String name = document.getString("name");
                         if (name != null && !name.isEmpty()) { // Solo añade Pokémon válidos
                             Pokemon pokemon = document.toObject(Pokemon.class);
-                            Log.d("Firestore", "Pokemon cargado: " + pokemon.getName());
+
                             if (pokemon != null) {
-                                capturedList.add(pokemon);
+                                Log.d("Firestore", "Pokemon cargado: " +
+                                        "Name: " + pokemon.getName() +
+                                        ", ID: " + pokemon.getId() +
+                                        ", ImageUrl: " + pokemon.getImageUrl() +
+                                        ", Types: " + pokemon.getTypes() +
+                                        ", Weight: " + pokemon.getWeight() +
+                                        ", Height: " + pokemon.getHeight());
+                            } else {
+                                Log.d("Firestore", "Documento vacío o no válido.");
                             }
+
+                            capturedList.add(pokemon);
+
+
                         }
                     }
                     listener.onComplete(true);
                     System.out.println("Lista cargada. Tamaño: " + capturedList.size());
+                    System.out.println("Lista de pokemon capturados: ");
+                    for (int i = 0; i< capturedList.size(); i++) {
+                        System.out.println("nombre " + capturedList.get(i).getName() +  " id: " + pokemonList.get(i).getId());
+                    }
                     notifyCapturedListUpdated(); // Notificar cambios
                 })
                 .addOnFailureListener(e -> {
@@ -186,10 +202,14 @@ public class PokemonManager {
                     saveCapturedPokemonToFirestore(pokemon, new OnCaptureListener() {
                         @Override
                         public void onSuccess() {
-                            capturedList.add(pokemon); // Añadir a la lista de capturados
-                            if (listener != null) {
-                                listener.onSuccess(); // Notificar al listener del éxito
+                            if(!capturedList.contains(pokemon)){
+                                capturedList.add(pokemon); // Añadir a la lista de capturados
+                                if (listener != null) {
+                                    listener.onSuccess(); // Notificar al listener del éxito
+                                    System.out.println("Exito al capturar pokemon");
+                                }
                             }
+
                         }
 
                         @Override
@@ -215,6 +235,7 @@ public class PokemonManager {
                 }
             }
         });
+
     }
 
     private void saveCapturedPokemonToFirestore(Pokemon pokemon, OnCaptureListener listener) {
