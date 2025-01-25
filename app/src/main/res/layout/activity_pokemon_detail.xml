@@ -18,7 +18,7 @@
         android:id="@+id/image_pokemon"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/icon_poke"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"/>
 
@@ -74,13 +74,15 @@
         <ImageView
             android:id="@+id/image_type"
             android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ic_launcher_background"
+            android:layout_height="40dp"
+            android:src="@drawable/label_flying"
             android:layout_marginEnd="5dp"/>
         <ImageView
             android:id="@+id/image_type2"
             android:layout_width="60dp"
-            android:layout_height="60dp"/>
+            android:layout_height="40dp"
+            android:src="@drawable/label_fighting"
+            android:visibility="invisible"/>
 
     </LinearLayout>
 

@@ -16,4 +16,7 @@
     <string name="free_poke">%s now is free!</string>
     <string name="poke_captured">%s captured!</string>
     <string name="error_capturing">"Error capturing: "</string>
+    <string name="error_loading_captured_pokemon">Error loading captured Pokemon</string>
+    <string name="error_releasing_pokemon">"Error releasing Pokemon: "</string>
+    <string name="error_loading_captured_list">Error loading captured list</string>
 </resources>
