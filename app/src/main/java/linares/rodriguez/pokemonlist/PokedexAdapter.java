@@ -50,10 +50,7 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
         Pokemon pokemon = pokedexList.get(position);
 
         boolean isCaptured = pokemonManager.isPokemonCaptured(pokemon);
-        System.out.println("pokemon " +  pokemon.getName() + "Está capturado? " +  isCaptured);
-
         holder.bind(pokemon, isCaptured);
-        System.out.println("Tamaño de capturados: " +  pokemonManager.getCapturedList().size());
 
 
         // Cambiar color si está capturado
@@ -69,13 +66,15 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
                 pokemonManager.capturePokemon(pokemon, new PokemonManager.OnCaptureListener() {
                     @Override
                     public void onSuccess() {
+                        String nombre = pokemon.getName().toUpperCase().charAt(0) + pokemon.getName().substring(1, pokemon.getName().length());
                         holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.captured_color));
+                        Toast.makeText(context, String.format(context.getString(R.string.poke_captured), nombre), Toast.LENGTH_SHORT).show();
                         listener.onPokemonCaptured(pokemon); // Refrescar la lista
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        Toast.makeText(context, "Error al capturar: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, context.getString(R.string.error_capturing) + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }

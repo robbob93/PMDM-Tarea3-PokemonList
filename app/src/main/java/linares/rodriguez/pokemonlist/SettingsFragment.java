@@ -50,7 +50,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         String savedLanguage = preferences.getString("language", "en"); // "en" es el valor predeterminado
 
-        System.out.println("el lenguaje guardado es: " + savedLanguage);
         boolean isEnglish = savedLanguage.equals("en");
 
         if (languageSwitch != null) {
@@ -85,9 +84,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private boolean showLogoutConfirmationDialog(Preference preference) {
         new AlertDialog.Builder(getContext())
-                .setTitle("Salir de la aplicación")
-                .setMessage("¿Está segur@ de querer salir?")
-                .setPositiveButton("Sí", (dialog, which) -> {
+                .setTitle(R.string.exit_application)
+                .setMessage(R.string.sure_to_leave)
+                .setPositiveButton(R.string.yes, (dialog, which) -> {
                     logoutSession(preference);
                 })
                 .setNegativeButton("No", (dialog, which) -> {
@@ -109,7 +108,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private void setLocale(String language) {
             Locale locale = new Locale(language);
-        System.out.println("idioma cambiado a " + language);
             Locale.setDefault(locale);
             // Actualiza la configuración de recursos con el nuevo idioma
             Resources resources = getResources();
@@ -117,7 +115,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             config.setLocale(locale);
             // Aplica los cambios y reinicia la actividad para que el idioma se actualice
             resources.updateConfiguration(config, resources.getDisplayMetrics());
-            //getActivity().recreate();
 
         }
 

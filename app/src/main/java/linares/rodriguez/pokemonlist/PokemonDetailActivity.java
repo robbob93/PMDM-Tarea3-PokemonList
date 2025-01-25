@@ -30,8 +30,8 @@ public class PokemonDetailActivity extends AppCompatActivity {
         ArrayList<String> typeList = intent.getStringArrayListExtra("types");
         binding.pokemonName.setText(nombre.toUpperCase().charAt(0) + nombre.substring(1, nombre.length()));
         binding.pokemonIndex.setText(intent.getStringExtra("id"));
-        binding.pokemonHeight.setText(intent.getStringExtra("height"));
-        binding.pokemonWeight.setText(intent.getStringExtra("weight"));
+        binding.pokemonHeight.setText(intent.getStringExtra("height") + "m");
+        binding.pokemonWeight.setText(intent.getStringExtra("weight") + "Kg");
 
         String imageUrl = intent.getStringExtra("imageUrl");
         Picasso.get().load(imageUrl).into(binding.imagePokemon);

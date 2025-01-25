@@ -25,7 +25,6 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
 
 
 
-
     public void setOnPokemonRemovedListener(OnPokemonRemovedListener listener) {
         this.removedListener = listener;
     }
@@ -40,8 +39,6 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.itemClickListener = listener;
     }
-
-
 
 
     public CapturedPokemonAdapter(List<Pokemon> capturedPokemonList, Context context) {
@@ -59,24 +56,17 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
 
     @Override
     public void onBindViewHolder(@NonNull CapturedViewHolder holder, int position) {
-        System.out.println("Tamaño capturedPokemonList: " + capturedPokemonList.size());
         Pokemon pokemon = capturedPokemonList.get(position);
         holder.bind(pokemon);
-        System.out.println("Bindeando pokemon " +  pokemon.getName() + " Con tipos: " + pokemon.getTypesNames());
+
         List<String> types = pokemon.getTypesNames();
         // Construir el nombre del recurso basado en el tipo
 
-
-
         String type1 = types.get(0);
         String resourceNameType1 = "label_" + type1.toLowerCase(); // Ejemplo: "label_grass"
-        System.out.println(pokemon.getName()+" Buscando label: " +  resourceNameType1);
         // Obtener el ID del recurso dinámicamente
         int resourceId = holder.itemView.getContext().getResources().getIdentifier(
                 resourceNameType1, "drawable", holder.itemView.getContext().getPackageName());
-        System.out.println("Resource Id para pokemon " + pokemon.getName()+ ": " + resourceId);
-
-
 
         holder.binding.imageType.setImageResource(resourceId);
 
@@ -90,7 +80,6 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
             int resourceId2 = holder.itemView.getContext().getResources().getIdentifier(
                     resourceNameType2, "drawable", holder.itemView.getContext().getPackageName());
             holder.binding.imageType2.setImageResource(resourceId2);
-            System.out.println(pokemon.getName()+ " Buscando label tipo2: " +  resourceNameType2);
         }
 
 
@@ -115,12 +104,6 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
         this.canDelete = canDelete;
     }
 
-
-
-
-
-
-
     public class CapturedViewHolder extends RecyclerView.ViewHolder {
         private final CardviewCapturedBinding binding;
 
@@ -131,16 +114,10 @@ public class CapturedPokemonAdapter extends RecyclerView.Adapter<CapturedPokemon
 
         public void bind(Pokemon pokemon) {
             String nombre = pokemon.getName();
-            System.out.println("Nombre de pokemon en bind de CapturedPokemonAdapter: " + nombre);
             binding.namePokemon.setText(nombre.toUpperCase().charAt(0) + nombre.substring(1, nombre.length()));
-
-
-            System.out.println("Intentando poner imagen de Picasso en el pokemon " + pokemon.getName() + "imageURL: " + pokemon.getImageUrl() + " id: " + pokemon.getId());
             Picasso.get().load(pokemon.getImageUrl()).into(binding.imagePokemon);
 
             binding.releaseButton.setEnabled(canDelete);
-
-
             binding.releaseButton.setOnClickListener(v ->
                     removedListener.onPokemonRemoved(pokemon)); // Notifica al fragmento);
 

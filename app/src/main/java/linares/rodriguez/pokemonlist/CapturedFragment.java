@@ -91,7 +91,6 @@ public class CapturedFragment extends Fragment {
             intent.putExtra("types", listaTipos);
             intent.putExtra("height", String.valueOf(pokemon.getHeight()));
 
-            System.out.println("PESO DE " + pokemon.getName() + " : " +  pokemon.getWeight());
             intent.putExtra("weight", String.valueOf(pokemon.getWeight()));
             intent.putExtra("imageUrl", pokemon.getImageUrl());
             startActivity(intent);
@@ -102,9 +101,10 @@ public class CapturedFragment extends Fragment {
             pokemonManager.releasePokemon(pokemon, new PokemonManager.OnReleaseListener() {
                 @Override
                 public void onSuccess(Pokemon pokemon) {
+                    String nombre = pokemon.getName().toUpperCase().charAt(0) + pokemon.getName().substring(1, pokemon.getName().length());
+                    capturedPokemonList.remove(pokemon); //Se quita el pokemon dado que ha sido satifactorio quitarlo de Firestore
 
-                    capturedPokemonList.remove(pokemon); //quitado pokemon dado que ha sido satifactorio quitarlo de Firestore
-                    Toast.makeText(getContext(), String.format("Pokemon %s liberado", pokemon.getName()), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), String.format(getString(R.string.free_poke), nombre), Toast.LENGTH_SHORT).show();
                     adapter.notifyDataSetChanged(); // Aquí notificacion al adaptador que la lista ha cambiado
                 }
 

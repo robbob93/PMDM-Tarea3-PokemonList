@@ -149,10 +149,6 @@ public class Pokemon implements Serializable {
             return type;
         }
 
-        public void setType(Type type) {
-            this.type = type;
-        }
-
         public static class Type {
             @SerializedName("name")
             private String name;

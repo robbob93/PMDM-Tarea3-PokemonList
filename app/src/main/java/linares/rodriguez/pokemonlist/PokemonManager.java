@@ -91,13 +91,11 @@ public class PokemonManager {
                     }
                 } else {
                     System.out.println("Error al cargar lista de Pokémon");
-                    //Toast.makeText(getContext(), "Error al cargar lista de Pokémon", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
             public void onFailure(Call<PokeApiResp> call, Throwable t) {
                 System.out.println("Fail loading pokedex");
-                //Toast.makeText(getContext(), "Fail loading pokedex", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -115,30 +113,10 @@ public class PokemonManager {
                         String name = document.getString("name");
                         if (name != null && !name.isEmpty()) { // Solo añade Pokémon válidos
                             Pokemon pokemon = document.toObject(Pokemon.class);
-
-                            if (pokemon != null) {
-                                Log.d("Firestore", "Pokemon cargado: " +
-                                        "Name: " + pokemon.getName() +
-                                        ", ID: " + pokemon.getId() +
-                                        ", ImageUrl: " + pokemon.getImageUrl() +
-                                        ", Types: " + pokemon.getTypes() +
-                                        ", Weight: " + pokemon.getWeight() +
-                                        ", Height: " + pokemon.getHeight());
-                            } else {
-                                Log.d("Firestore", "Documento vacío o no válido.");
-                            }
-
                             capturedList.add(pokemon);
-
-
                         }
                     }
                     listener.onComplete(true);
-                    System.out.println("Lista cargada. Tamaño: " + capturedList.size());
-                    System.out.println("Lista de pokemon capturados: ");
-                    for (int i = 0; i< capturedList.size(); i++) {
-                        System.out.println("nombre " + capturedList.get(i).getName() +  " id: " + pokemonList.get(i).getId());
-                    }
                     notifyCapturedListUpdated(); // Notificar cambios
                 })
                 .addOnFailureListener(e -> {
@@ -153,8 +131,6 @@ public class PokemonManager {
     }
 
 
-
-
     public void releasePokemon(Pokemon pokemon, OnReleaseListener listener) {
         // Eliminar de Firestore
         FirebaseFirestore database = FirebaseFirestore.getInstance();
@@ -166,10 +142,9 @@ public class PokemonManager {
                         querySnapshot.getDocuments().get(0).getReference().delete()
                                 .addOnSuccessListener(runnable -> {
 
-                                    System.out.println("TAMAÑO CAPTUREDlIST EN POKEMONMANAGER " +  capturedList.size());
                                     // Eliminar de la lista local
                                     capturedList.remove(pokemon);
-                                    System.out.println("TAMAÑO CAPTUREDlIST EN POKEMONMANAGER después" +  capturedList.size());
+
                                     listener.onSuccess(pokemon); // Pasar el Pokémon eliminado
                                 })
                                 .addOnFailureListener(e -> {
@@ -184,11 +159,6 @@ public class PokemonManager {
         void onSuccess(Pokemon pokemon);
         void onFailure(Exception e);
     }
-
-
-
-
-
 
     public interface OnCaptureListener {
         void onSuccess();
@@ -212,7 +182,6 @@ public class PokemonManager {
             public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Pokemon details = response.body();
-                    System.out.println("Tipos del pokemon " + details.getName() + " en details: " + details.getTypes());
 
                     // Actualiza el Pokémon con los detalles adicionales
                     pokemon.setId(details.getId());
@@ -229,7 +198,6 @@ public class PokemonManager {
                                 capturedList.add(pokemon); // Añadir a la lista de capturados
                                 if (listener != null) {
                                     listener.onSuccess(); // Notificar al listener del éxito
-                                    System.out.println("Exito al capturar pokemon");
                                 }
                             }
 
@@ -251,7 +219,6 @@ public class PokemonManager {
 
             @Override
             public void onFailure(Call<Pokemon> call, Throwable t) {
-                System.out.println("HA HABIDO UN FALLO EN LA LLAMADA");
                 t.printStackTrace();
                 if (listener != null) {
                     listener.onFailure(new Exception(t));
@@ -265,13 +232,11 @@ public class PokemonManager {
         firestore.collection("capturados").document(pokemon.getName())
                 .set(pokemon)
                 .addOnSuccessListener(aVoid -> {
-                    System.out.println("Pokemon guardado en Firestore: " + pokemon.getName());
                     if (listener != null) {
                         listener.onSuccess(); // Notificar éxito
                     }
                 })
                 .addOnFailureListener(e -> {
-                    System.out.println("Error al guardar en Firestore: " + e.getMessage());
                     if (listener != null) {
                         listener.onFailure(e); // Notificar error
                     }
