@@ -19,4 +19,5 @@
     <string name="error_loading_captured_pokemon">Error loading captured Pokemon</string>
     <string name="error_releasing_pokemon">"Error releasing Pokemon: "</string>
     <string name="error_loading_captured_list">Error loading captured list</string>
+    <string name="pokemonList_empty">The pokemon list is empty</string>
 </resources>

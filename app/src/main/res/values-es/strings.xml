@@ -20,4 +20,5 @@
     <string name="error_loading_captured_pokemon">Error al cargar los Pokémon capturados</string>
     <string name="error_releasing_pokemon">Error al liberar el Pokémon</string>
     <string name="error_loading_captured_list">Error al cargar la lista de capturados</string>
+    <string name="pokemonList_empty">La lista de pokemon está vacía</string>
 </resources>
