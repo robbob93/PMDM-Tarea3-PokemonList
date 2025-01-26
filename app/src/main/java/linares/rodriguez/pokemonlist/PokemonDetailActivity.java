@@ -2,6 +2,7 @@ package linares.rodriguez.pokemonlist;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,6 +60,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
             String resourceNameType2 = "label_" + type2.toLowerCase(); // Ejemplo: "label_fire"
             int resourceId2 = binding.getRoot().getResources().getIdentifier(
                     resourceNameType2, "drawable", binding.getRoot().getContext().getPackageName());
+            binding.imageType2.setVisibility(View.VISIBLE);
             binding.imageType2.setImageResource(resourceId2);
         }
     }

@@ -88,6 +88,9 @@ public class CapturedFragment extends Fragment {
                 capturedPokemonList.addAll(pokemonManager.getCapturedList()); // Añade los Pokémon capturados a la lista
                 capturedPokemonList.sort(Comparator.comparingInt(pokemon -> pokemon.getId())); // Ordena los Pokémon por ID
                 adapter.notifyDataSetChanged(); // Notifica al adaptador
+                if(capturedPokemonList.isEmpty()){
+                    Toast.makeText(requireContext(), R.string.pokemonList_empty, Toast.LENGTH_SHORT).show();
+                }
 
             } else {
                 // Si ocurre un error al cargar los Pokémon, muestra un mensaje al usuario
