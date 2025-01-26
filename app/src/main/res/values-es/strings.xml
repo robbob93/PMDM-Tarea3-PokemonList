@@ -9,4 +9,15 @@
     <string name="type_s">Tipo(s):</string>
     <string name="height">Altura:</string>
     <string name="weight">Peso:</string>
+    <string name="captured">Capturados</string>
+    <string name="settings">Ajustes</string>
+    <string name="exit_application">Salir de la aplicación</string>
+    <string name="sure_to_leave">¿Estás segur@ de querer salir?</string>
+    <string name="yes">Sí</string>
+    <string name="free_poke">¡%s es libre ahora!</string>
+    <string name="poke_captured">¡%s capturado!</string>
+    <string name="error_capturing">"Error capturando: "</string>
+    <string name="error_loading_captured_pokemon">Error al cargar los Pokémon capturados</string>
+    <string name="error_releasing_pokemon">Error al liberar el Pokémon</string>
+    <string name="error_loading_captured_list">Error al cargar la lista de capturados</string>
 </resources>

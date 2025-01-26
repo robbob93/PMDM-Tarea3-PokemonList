@@ -3,9 +3,20 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="close_session">Close session</string>
     <string name="about">About...</string>
-    <string name="language">language</string>
+    <string name="language">Language</string>
     <string name="enable_release_pokemon">Enable release pokemon</string>
     <string name="type_s">Type(s):</string>
     <string name="height">Height:</string>
     <string name="weight">Weight:</string>
+    <string name="captured">Captured</string>
+    <string name="settings">Settings</string>
+    <string name="exit_application">Exit the application</string>
+    <string name="sure_to_leave">Are you sure you want to leave?</string>
+    <string name="yes">Yes</string>
+    <string name="free_poke">%s now is free!</string>
+    <string name="poke_captured">%s captured!</string>
+    <string name="error_capturing">"Error capturing: "</string>
+    <string name="error_loading_captured_pokemon">Error loading captured Pokemon</string>
+    <string name="error_releasing_pokemon">"Error releasing Pokemon: "</string>
+    <string name="error_loading_captured_list">Error loading captured list</string>
 </resources>

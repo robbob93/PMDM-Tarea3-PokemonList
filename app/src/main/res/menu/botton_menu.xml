@@ -3,14 +3,14 @@
 
     <item
         android:id="@+id/catched_pokemon_menu"
-        android:icon="@android:drawable/ic_dialog_dialer"
-        android:title="Captured" />
+        android:icon="@drawable/icon_poke"
+        android:title="@string/captured" />
     <item
         android:id="@+id/pokedex_menu"
-        android:icon="@android:drawable/ic_menu_mapmode"
+        android:icon="@drawable/pokedex"
         android:title="Pokédex" />
     <item
         android:id="@+id/settings_menu"
-        android:icon="@android:drawable/ic_menu_mapmode"
-        android:title="Settings" />
+        android:icon="@drawable/icon_settings"
+        android:title="@string/settings" />
 </menu>
