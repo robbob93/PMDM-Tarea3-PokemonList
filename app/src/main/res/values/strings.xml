@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PokemonList</string>
+    <string name="app_name">PokeManagert</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="close_session">Close session</string>
     <string name="about">About...</string>
