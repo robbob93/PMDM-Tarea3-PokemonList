@@ -24,6 +24,12 @@
                 android:text="Pokemon name"
                 android:textSize="20sp" />
 
+            <ImageView
+                android:id="@+id/image_type"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="end"
+                android:src="@drawable/ic_launcher_background" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

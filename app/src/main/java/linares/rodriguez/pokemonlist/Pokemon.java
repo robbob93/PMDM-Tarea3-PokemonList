@@ -6,70 +6,61 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Clase que representa un Pokémon.
- * Esta clase contiene información sobre el Pokémon, como su ID, nombre, tipos, peso, altura y su imagen.
- * Además, maneja la conversión de tipos de Pokémon a una lista de nombres.
- */
 public class Pokemon implements Serializable {
 
-    //Mapea la clave "id" en el JSON al campo "id" en la clase.
     @SerializedName("id")
-    private int id; // ID del Pokémon
-    //Mapea la clave "name" en el JSON al campo "name" en la clase.
+    private int id;
+
     @SerializedName("name")
-    private String name; // Nombre del Pokémon
-    //Mapea la clave "sprites" en el JSON al campo "sprites" en la clase.
+    private String name;
+
     @SerializedName("sprites")
-    private Sprites sprites; // Información sobre la imagen del Pokémon
-    //Mapea la clave "types" en el JSON al campo "types" en la clase.
+    private Sprites sprites;
+
     @SerializedName("types")
-    private List<TypeEntry> types; // Tipos del Pokémon, representados por una lista de objetos TypeEntry
-    //Mapea la clave "weight" en el JSON al campo "weight" en la clase.
+    private List<TypeEntry> types; // Usamos List<String> para simplificar el manejo de tipos
+
     @SerializedName("weight")
-    private float weight; // Peso del Pokémon
-    //Mapea la clave "height" en el JSON al campo "height" en la clase.
+    private float weight;
+
     @SerializedName("height")
-    private float height; // Altura del Pokémon
+    private float height;
 
-    private List<String> typesNames; // Lista de los nombres de los tipos de Pokémon
+    private List<String> typeNames;
 
-    /**
-     * Constructor vacío necesario para Firestore y otras operaciones de deserialización.
-     */
+    // Constructor vacío (necesario para Firestore y otras librerías)
     public Pokemon() {
     }
 
-    /**
-     * Constructor para crear un objeto Pokémon con los datos completos.
-     *
-     * @param id El ID del Pokémon.
-     * @param name El nombre del Pokémon.
-     * @param imageUrl La URL de la imagen del Pokémon.
-     * @param types La lista de tipos del Pokémon.
-     * @param weight El peso del Pokémon.
-     * @param height La altura del Pokémon.
-     */
-    public Pokemon(int id, String name, String imageUrl, List<String> types, float weight,  float height) {
+    // Constructor Para la API
+/*
+    public Pokemon(int id, String name, String imageUrl, float weight, List<TypeEntry> types, float height) {
         this.id = id;
         this.name = name;
-        this.sprites = new Sprites(imageUrl); // Instanciar Sprites con la URL de la imagen
-        this.typesNames = types; // Guardar los nombres de los tipos
+        this.sprites = new Sprites(imageUrl); // Creamos la instancia de Sprites
+        this.types = types; // Guardamos la lista de TypeEntry
         this.weight = weight;
         this.height = height;
     }
 
-    /**
-     * Constructor con solo el nombre para la lista de Pokedex.
-     *
-     * @param name El nombre del Pokémon.
-     */
+ */
+
+    public Pokemon(int id, String name, String imageUrl, List<String> types, float weight,  float height) {
+        this.id = id;
+        this.name = name;
+        this.sprites = new Sprites(imageUrl); // Creamos la instancia de Sprites
+        this.typeNames = types; // Guardamos la lista de TypeEntry
+        this.weight = weight;
+        this.height = height;
+    }
+
+
+
     public Pokemon(String name){
         this.name = name;
     }
 
     // Getters y Setters
-
     public int getId() {
         return id;
     }
@@ -86,20 +77,15 @@ public class Pokemon implements Serializable {
         this.name = name;
     }
 
-    /**
-     * Obtiene la URL de la imagen del Pokémon.
-     *
-     * @return La URL de la imagen, o null si no hay imagen disponible.
-     */
     public String getImageUrl() {
         return sprites != null ? sprites.getFrontDefault() : null;
     }
 
     public void setImageUrl(String imageUrl) {
         if (sprites == null) {
-            sprites = new Sprites(imageUrl); // Si no hay un objeto Sprites, lo creamos con la URL
+            sprites = new Sprites(imageUrl);
         } else {
-            sprites.setFrontDefault(imageUrl); // Si ya existe, solo actualizamos la URL de la imagen
+            sprites.setFrontDefault(imageUrl);
         }
     }
 
@@ -111,14 +97,19 @@ public class Pokemon implements Serializable {
         return types;
     }
 
-    /**
-     * Obtiene los nombres de los tipos de Pokémon como una lista de Strings.
-     *
-     * @return Una lista con los nombres de los tipos.
-     */
-    public List<String> getTypesNames() {
-        return transformToListTypeNames(); // Convierte los tipos a una lista de nombres
+    public List<String> getTypesTransform() {
+        return transformToListTypeNames();
     }
+
+    public List<String> getTypesNames() {
+        return transformToListTypeNames();
+    }
+
+    public void setTypeNames(List<String> types) {
+        this.typeNames = types;
+    }
+
+
 
     public float getWeight() {
         return weight;
@@ -136,12 +127,10 @@ public class Pokemon implements Serializable {
         this.height = height;
     }
 
-    /**
-     * Clase interna que representa la información sobre las imágenes del Pokémon.
-     */
+    // Clase interna Sprites
     public static class Sprites {
         @SerializedName("front_default")
-        private String frontDefault; // URL de la imagen del frente del Pokémon
+        private String frontDefault;
 
         public Sprites(String frontDefault) {
             this.frontDefault = frontDefault;
@@ -156,23 +145,22 @@ public class Pokemon implements Serializable {
         }
     }
 
-    /**
-     * Clase interna que representa la información sobre los tipos de Pokémon.
-     */
+    // Clase interna TypeEntry (similar a la que ya tenías en `PokemonDetails`)
     public static class TypeEntry {
         @SerializedName("type")
-        private Type type; // Información sobre el tipo del Pokémon
+        private Type type;
 
         public Type getType() {
             return type;
         }
 
-        /**
-         * Clase interna que representa un tipo específico de Pokémon.
-         */
+        public void setType(Type type) {
+            this.type = type;
+        }
+
         public static class Type {
             @SerializedName("name")
-            private String name; // Nombre del tipo (e.g., "fire", "water")
+            private String name;
 
             public String getName() {
                 return name;
@@ -184,20 +172,28 @@ public class Pokemon implements Serializable {
         }
     }
 
-    /**
-     * Método auxiliar para convertir la lista de objetos TypeEntry a una lista de nombres de tipos.
-     *
-     * @return Una lista de nombres de los tipos del Pokémon.
-     */
+    // Método auxiliar para extraer los nombres de los tipos
     public List<String> transformToListTypeNames() {
         List<String> typeNames = new ArrayList<>();
         if (types != null) {
             for (TypeEntry typeEntry : types) {
                 if (typeEntry.getType() != null && typeEntry.getType().getName() != null) {
-                    typeNames.add(typeEntry.getType().getName()); // Añade el nombre del tipo a la lista
+                    typeNames.add(typeEntry.getType().getName());
                 }
             }
         }
         return typeNames;
+    }
+
+    public static List<TypeEntry> convertTypeNamesToEntries(List<String> typeNames) {
+        List<TypeEntry> typeEntries = new ArrayList<>();
+        for (String name : typeNames) {
+            TypeEntry.Type type = new TypeEntry.Type();
+            type.setName(name); // Necesitas agregar un setter en la clase Type
+            TypeEntry entry = new TypeEntry();
+            entry.setType(type); // Necesitas agregar un setter en la clase TypeEntry
+            typeEntries.add(entry);
+        }
+        return typeEntries;
     }
 }
