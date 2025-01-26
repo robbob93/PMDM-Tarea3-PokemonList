@@ -54,8 +54,27 @@ El desarrollo de esta aplicación ha sido una experiencia enriquecedora y desafi
 - Desafíos técnicos: La integración de Retrofit para buscar los pokemon utilizando por primera vez una API y después completar sus datos para, posteriormente, incorporarlos en Firestore permitiendo la sincronización de datos en tiempo real entre la base de datos y las listas locales, fueron retos clave.
 - Aprendizajes obtenidos: Mejoré mis habilidades en la gestión de datos compartidos, además de profundizar en el uso de librerías como Picasso y asentar los conocimientos sobre RecyclerView para optimizar la experiencia del usuario.
 - Reflexión final: Este proyecto no solo me permitió consolidar conocimientos en Android, sino también explorar mejores prácticas en el desarrollo móvil, como la estructuración del código y la persistencia de los datos.
-
+---
 ## 📈 Nuevas vías de desarrollo
 - La posibilidad de que cada usuario tenga una lista de pokemon capturados independiente.
 - Implementación de modo oscuro.
 - Ampliación del número de pokemon a listar y poder capturar.
+
+## Capturas de pantalla
+
+- Inicio de la app   
+![inicio](https://github.com/user-attachments/assets/5aa3350d-6dd4-475a-b048-a883d5ace808)
+
+- Lista de pokemon   
+![capt_lista](https://github.com/user-attachments/assets/0fc46dab-0d08-4722-b5ed-906c4760e914)
+
+- Lista de pokemon capturados   
+![captura capt](https://github.com/user-attachments/assets/59e86db5-197d-435c-8598-4793749a8303)
+
+- Detalles del pokemon capturado   
+![capt_detalles](https://github.com/user-attachments/assets/31c5ec17-1030-499c-9fc2-4f5856a03633)
+
+- Pantalla ajustes   
+![capt_ajustes](https://github.com/user-attachments/assets/ba579094-c5b6-4202-ac5e-153afb75b787)
+
+
